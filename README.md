@@ -9,6 +9,7 @@ Have a way to track the health state of batteries, based on periodically measure
 - After that, the backend could start a Python script to plot the values in a PNG image and store it in the server.
 - Finally, a simple static frontend could take the generated PNGs and show them in a more user-friendly webpage.
 
+### Usage:
 The procedure to measure a discharge curve should be:
 1. Disconnect the solar panel (to ensure that the battery is not charging)
 2. Connect a defined load to the battery output
