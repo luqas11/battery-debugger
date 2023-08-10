@@ -1,5 +1,7 @@
 import express from "express";
 import fs from "fs/promises";
+import { exec } from "child_process";
+
 import {
   formatFileName,
   getCurrentTestName,
@@ -97,6 +99,14 @@ app.post("/end-test", async (req, res) => {
       `../records/${formatFileName(currentTestName)}`,
       `../records/${currentTestName}.csv`
     );
+
+    exec(
+      `python ./curve_plotter.py "${currentTestName}"`,
+      (error, stdout, stderr) => {
+        if (error) console.error(`Error executing curve_plotter.py: ${error}`);
+      }
+    );
+
     res.json({
       message: `Test with name "${currentTestName}" has been stopped.`,
     });

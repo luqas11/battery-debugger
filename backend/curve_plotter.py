@@ -1,11 +1,17 @@
+import sys
 import matplotlib.pyplot as plt
 import csv
 
 x = []
 y = []
-filename = 'example'
 
-with open(f'./records/{filename}.csv', mode='r') as csv_file:
+if len(sys.argv) < 2 or not sys.argv[1]:
+        print("Invalid file name")
+        sys.exit(1)
+
+filename = sys.argv[1]
+
+with open(f'../records/{filename}.csv', mode='r') as csv_file:
     csv_reader = csv.DictReader(csv_file)
     line_count = 0
     for row in csv_reader:
@@ -24,4 +30,4 @@ ax.plot(x, y, linewidth=2.0)
 plt.title('Discharge curve')
 plt.xlabel('Time (s)')
 plt.ylabel('Voltage (V)')
-plt.savefig(f'./records/{filename}.png', dpi=200)
+plt.savefig(f'../records/{filename}.png', dpi=200)
