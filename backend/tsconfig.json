@@ -1,7 +1,3 @@
 {
-  "compilerOptions": {
-    "baseUrl": ".",
-    "rootDir": ".",
-    "esModuleInterop": true
-  }
+  "extends": "@tsconfig/node-lts/tsconfig.json"
 }

@@ -15,7 +15,6 @@ app.use(express.json());
 app.post("/save-reading", async (req, res) => {
   try {
     const currentTestName = await getCurrentTestName();
-
     if (!currentTestName) {
       res.status(400).json({
         message:
@@ -60,7 +59,6 @@ app.post("/start-test", async (req, res) => {
     }
 
     const currentTestName = await getCurrentTestName();
-
     if (currentTestName) {
       res.status(400).json({
         message: `Test "${currentTestName}" is currently in progress. To stop it, use /end-test.`,
@@ -69,7 +67,6 @@ app.post("/start-test", async (req, res) => {
     }
 
     const isNameAvailable = await isTestNameAvailable(name);
-
     if (!isNameAvailable) {
       res.status(400).json({
         message: `A test with name "${name}" already exists.`,
@@ -89,7 +86,6 @@ app.post("/start-test", async (req, res) => {
 app.post("/end-test", async (req, res) => {
   try {
     const currentTestName = await getCurrentTestName();
-
     if (!currentTestName) {
       res.status(400).json({
         message: "No test is currently in progress.",
