@@ -52,18 +52,18 @@ app.post("/save-reading", async (req, res) => {
 
 app.post("/start-test", async (req, res) => {
   try {
-    const name = req.body.name;
-    if (!name || typeof name !== "string" || name.length === 0) {
-      res.status(400).json({
-        message: "Invalid test name. It must be a string",
-      });
-      return;
-    }
-
     const currentTestName = await getCurrentTestName();
     if (currentTestName) {
       res.status(400).json({
         message: `Test "${currentTestName}" is currently in progress. To stop it, use /end-test.`,
+      });
+      return;
+    }
+
+    const name = req.body.name;
+    if (!name || typeof name !== "string" || name.length === 0) {
+      res.status(400).json({
+        message: "Invalid test name. It must be a string",
       });
       return;
     }

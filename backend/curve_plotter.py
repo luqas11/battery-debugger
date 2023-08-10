@@ -9,9 +9,9 @@ if len(sys.argv) < 2 or not sys.argv[1]:
         print("Invalid file name")
         sys.exit(1)
 
-filename = sys.argv[1]
+test_name = sys.argv[1]
 
-with open(f'../records/{filename}.csv', mode='r') as csv_file:
+with open(f'../records/{test_name}.csv', mode='r') as csv_file:
     csv_reader = csv.DictReader(csv_file)
     line_count = 0
     for row in csv_reader:
@@ -27,7 +27,7 @@ fig, ax = plt.subplots(figsize=(window_size * 16, window_size * 9), tight_layout
 
 ax.plot(x, y, linewidth=2.0)
 
-plt.title('Discharge curve')
+plt.title(test_name)
 plt.xlabel('Time (s)')
 plt.ylabel('Voltage (V)')
-plt.savefig(f'../records/{filename}.png', dpi=200)
+plt.savefig(f'../records/{test_name}.png', dpi=200)
