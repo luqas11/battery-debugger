@@ -1,7 +1,7 @@
-import fs from "fs";
+import fs from "fs/promises";
 
-export const getCurrentTestName = () => {
-  const recordsDir = fs.readdirSync("../records");
+export const getCurrentTestName = async () => {
+  const recordsDir = await fs.readdir("../records");
   const fileName = recordsDir.find((file) => file.startsWith("current_"));
 
   if (!fileName) return;

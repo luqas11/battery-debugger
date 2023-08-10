@@ -1,5 +1,5 @@
 import express from "express";
-import fs from "fs";
+import fs from "fs/promises";
 import { formatFileName, getCurrentTestName } from "./utils";
 
 const app = express();
@@ -8,9 +8,9 @@ const port = 3000;
 
 app.use(express.json());
 
-app.post("/save-reading", (req, res) => {
+app.post("/save-reading", async (req, res) => {
   try {
-    const currentTestName = getCurrentTestName();
+    const currentTestName = await getCurrentTestName();
 
     if (!currentTestName) {
       throw new Error(
@@ -27,18 +27,22 @@ app.post("/save-reading", (req, res) => {
     }
 
     const content = `${time},${voltage}\n`;
-    fs.writeFileSync(`../records/${formatFileName(currentTestName)}`, content, {
-      flag: "a",
-    });
+    await fs.writeFile(
+      `../records/${formatFileName(currentTestName)}`,
+      content,
+      {
+        flag: "a",
+      }
+    );
     res.json({ message: `Reading saved to the test "${currentTestName}".` });
   } catch (err) {
     res.status(500).json({ message: err.message });
   }
 });
 
-app.post("/start-test", (req, res) => {
+app.post("/start-test", async (req, res) => {
   try {
-    const currentTestName = getCurrentTestName();
+    const currentTestName = await getCurrentTestName();
 
     if (currentTestName) {
       throw new Error(
@@ -46,7 +50,7 @@ app.post("/start-test", (req, res) => {
       );
     }
 
-    fs.writeFileSync(
+    await fs.writeFile(
       `../records/${formatFileName(req.body.name)}`,
       "Time,Voltage\n"
     );
@@ -56,15 +60,15 @@ app.post("/start-test", (req, res) => {
   }
 });
 
-app.post("/end-test", (req, res) => {
+app.post("/end-test", async (req, res) => {
   try {
-    const currentTestName = getCurrentTestName();
+    const currentTestName = await getCurrentTestName();
 
     if (!currentTestName) {
       throw new Error("No test is currently in progress.");
     }
 
-    fs.renameSync(
+    await fs.rename(
       `../records/${formatFileName(currentTestName)}`,
       `../records/${currentTestName}.csv`
     );
