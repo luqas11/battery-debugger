@@ -13,17 +13,20 @@ app.post("/save-reading", async (req, res) => {
     const currentTestName = await getCurrentTestName();
 
     if (!currentTestName) {
-      throw new Error(
-        "No test is currently in progress. To start one, use /start-test."
-      );
+      res.status(400).json({
+        message:
+          "No test is currently in progress. To start one, use /start-test.",
+      });
+      return;
     }
 
     const time = req.body.time;
     const voltage = req.body.voltage;
     if (typeof time !== "number" || typeof voltage !== "number") {
-      throw new Error(
-        "Invalid reading value/s. Time and voltage must be numbers."
-      );
+      res.status(400).json({
+        message: "Invalid reading value/s. Time and voltage must be numbers.",
+      });
+      return;
     }
 
     const content = `${time},${voltage}\n`;
@@ -36,7 +39,9 @@ app.post("/save-reading", async (req, res) => {
     );
     res.json({ message: `Reading saved to the test "${currentTestName}".` });
   } catch (err) {
-    res.status(500).json({ message: err.message });
+    res.status(500).json({
+      message: "An unexpected error has occurred. The reading was not saved.",
+    });
   }
 });
 
@@ -45,9 +50,10 @@ app.post("/start-test", async (req, res) => {
     const currentTestName = await getCurrentTestName();
 
     if (currentTestName) {
-      throw new Error(
-        `Test "${currentTestName}" is currently in progress. To stop it, use /end-test.`
-      );
+      res.status(400).json({
+        message: `Test "${currentTestName}" is currently in progress. To stop it, use /end-test.`,
+      });
+      return;
     }
 
     await fs.writeFile(
@@ -56,7 +62,9 @@ app.post("/start-test", async (req, res) => {
     );
     res.json({ message: `New test started with name "${req.body.name}".` });
   } catch (err) {
-    res.status(500).json({ message: err.message });
+    res.status(500).json({
+      message: "An unexpected error has occurred. The test has not started.",
+    });
   }
 });
 
@@ -65,7 +73,10 @@ app.post("/end-test", async (req, res) => {
     const currentTestName = await getCurrentTestName();
 
     if (!currentTestName) {
-      throw new Error("No test is currently in progress.");
+      res.status(400).json({
+        message: "No test is currently in progress.",
+      });
+      return;
     }
 
     await fs.rename(
@@ -76,7 +87,9 @@ app.post("/end-test", async (req, res) => {
       message: `Test with name "${currentTestName}" has been stopped.`,
     });
   } catch (err) {
-    res.status(500).json({ message: err.message });
+    res.status(500).json({
+      message: "An unexpected error has occurred. The test has not stopped.",
+    });
   }
 });
 
