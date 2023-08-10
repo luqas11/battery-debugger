@@ -1,0 +1,79 @@
+{
+	"info": {
+		"_postman_id": "3eaa5636-3bd0-4b11-80e1-bc5a626b5503",
+		"name": "BatteryDebugger",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "25131802"
+	},
+	"item": [
+		{
+			"name": "Save record",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"voltage\": 12.0,\r\n    \"time\": 1\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{BASE_URL}}/record",
+					"host": [
+						"{{BASE_URL}}"
+					],
+					"path": [
+						"record"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Start new test",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"name\": \"Discharge curve\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{BASE_URL}}/start-new",
+					"host": [
+						"{{BASE_URL}}"
+					],
+					"path": [
+						"start-new"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "End current test",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "{{BASE_URL}}/end-current",
+					"host": [
+						"{{BASE_URL}}"
+					],
+					"path": [
+						"end-current"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
