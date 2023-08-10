@@ -1,6 +1,10 @@
 import express from "express";
 import fs from "fs/promises";
-import { formatFileName, getCurrentTestName } from "./utils";
+import {
+  formatFileName,
+  getCurrentTestName,
+  isTestNameAvailable,
+} from "./utils";
 
 const app = express();
 const hostname = "192.168.0.11";
@@ -47,6 +51,14 @@ app.post("/save-reading", async (req, res) => {
 
 app.post("/start-test", async (req, res) => {
   try {
+    const name = req.body.name;
+    if (!name || typeof name !== "string" || name.length === 0) {
+      res.status(400).json({
+        message: "Invalid test name. It must be a string",
+      });
+      return;
+    }
+
     const currentTestName = await getCurrentTestName();
 
     if (currentTestName) {
@@ -56,11 +68,17 @@ app.post("/start-test", async (req, res) => {
       return;
     }
 
-    await fs.writeFile(
-      `../records/${formatFileName(req.body.name)}`,
-      "Time,Voltage\n"
-    );
-    res.json({ message: `New test started with name "${req.body.name}".` });
+    const isNameAvailable = await isTestNameAvailable(name);
+
+    if (!isNameAvailable) {
+      res.status(400).json({
+        message: `A test with name "${name}" already exists.`,
+      });
+      return;
+    }
+
+    await fs.writeFile(`../records/${formatFileName(name)}`, "Time,Voltage\n");
+    res.json({ message: `New test started with name "${name}".` });
   } catch (err) {
     res.status(500).json({
       message: "An unexpected error has occurred. The test has not started.",
