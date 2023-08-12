@@ -14,10 +14,11 @@ export const getCurrentTestName = async () => {
 
 /**
  * @param name
- * @returns the file name string for a test, given it's name.
+ * @returns a valid file name string for a test in progress, given it's name.
  */
 export const formatFileName = (name: string) => {
-  return "current_" + name + ".csv";
+  const parsedName = name.replace(" ", "_");
+  return "current_" + parsedName + ".csv";
 };
 
 /**

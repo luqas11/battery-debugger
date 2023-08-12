@@ -1,4 +1,4 @@
-import express from "express";
+import express, { RequestHandler } from "express";
 import fs from "fs/promises";
 import { exec } from "child_process";
 
@@ -13,6 +13,15 @@ const hostname = "192.168.0.11";
 const port = 3000;
 
 app.use(express.json());
+
+/**
+ * Logger to print incoming request's method and path.
+ */
+const logger: RequestHandler = (req, res, next) => {
+  console.log(req.method + " " + req.path);
+  next();
+};
+app.use(logger);
 
 app.post("/save-reading", async (req, res) => {
   try {
@@ -101,7 +110,7 @@ app.post("/end-test", async (req, res) => {
     );
 
     exec(
-      `python ./curve_plotter.py "${currentTestName}"`,
+      `python3 ./curve_plotter.py "${currentTestName}"`,
       (error, stdout, stderr) => {
         if (error) console.error(`Error executing curve_plotter.py: ${error}`);
       }

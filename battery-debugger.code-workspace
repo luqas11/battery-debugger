@@ -19,6 +19,16 @@
 	"settings": {
 		"arduino.additionalUrls": [
 			"http://arduino.esp8266.com/stable/package_esp8266com_index.json"
-		]
+		],
+		"files.associations": {
+			"optional": "cpp",
+			"ostream": "cpp",
+			"system_error": "cpp",
+			"array": "cpp",
+			"functional": "cpp",
+			"tuple": "cpp",
+			"type_traits": "cpp",
+			"utility": "cpp"
+		}
 	}
 }
