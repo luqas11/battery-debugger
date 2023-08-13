@@ -1,6 +1,7 @@
 import express, { RequestHandler } from "express";
 import fs from "fs/promises";
 import { exec } from "child_process";
+import "dotenv/config";
 
 import {
   formatFileName,
@@ -9,7 +10,7 @@ import {
 } from "./utils";
 
 const app = express();
-const hostname = "192.168.0.11";
+const hostname = process.env.HOSTNAME || "";
 const port = 3000;
 
 app.use(express.json());
