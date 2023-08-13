@@ -28,6 +28,6 @@ fig, ax = plt.subplots(figsize=(window_size * 16, window_size * 9), tight_layout
 ax.plot(x, y, linewidth=2.0)
 
 plt.title(test_name)
-plt.xlabel('Time (s)')
+plt.xlabel('Time (h)')
 plt.ylabel('Voltage (V)')
 plt.savefig(f'../records/{test_name}.png', dpi=200)
