@@ -1,0 +1,13 @@
+#ifndef CONFIG_H
+#define CONFIG_H
+
+#include <Arduino.h>
+
+// SSID of the WiFi network
+#define SSID "ssid"
+// Password of the WiFi network
+#define PASSWORD "password"
+// Base URL of the backend
+#define BASE_URL "http://192.168.0.1:3000"
+
+#endif
