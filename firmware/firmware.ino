@@ -9,7 +9,7 @@ const float REF_VOLTAGE = 11.46;
 // Input ADC calibration value
 const int REF_ADC = 566;
 // Readings period in minutes
-const int PERIOD = 5;
+const int PERIOD = 2;
 
 void setup()
 {
@@ -60,7 +60,14 @@ void loop()
         }
         else
         {
-            Serial.println("Request failed. Error code: " + String(httpCode) + ".");
+            if (httpCode < 0)
+            {
+                Serial.println("Request failed. Error: " + http.errorToString(httpCode) + ".");
+            }
+            else
+            {
+                Serial.println("Request failed. Error code: " + String(httpCode) + ".");
+            }
         }
         http.end();
     }
@@ -70,7 +77,7 @@ void loop()
     }
 
     delay(PERIOD * 1000 * 60);
-    digitalWrite(LED_PIN, HIGH);
-    delay(300);
     digitalWrite(LED_PIN, LOW);
+    delay(300);
+    digitalWrite(LED_PIN, HIGH);
 }
