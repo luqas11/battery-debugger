@@ -365,7 +365,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"name\": 123\r\n}",
+							"raw": "{\r\n    \"name\": 0\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -396,15 +396,15 @@
 						},
 						{
 							"key": "Content-Length",
-							"value": "52"
+							"value": "108"
 						},
 						{
 							"key": "ETag",
-							"value": "W/\"34-HYaApT84oGJZDwYS8oeHedQEzmk\""
+							"value": "W/\"6c-gOr3JAs2K0oRiMyoqVff9GBqia8\""
 						},
 						{
 							"key": "Date",
-							"value": "Thu, 10 Aug 2023 21:02:41 GMT"
+							"value": "Mon, 14 Aug 2023 03:49:10 GMT"
 						},
 						{
 							"key": "Connection",
@@ -416,7 +416,76 @@
 						}
 					],
 					"cookie": [],
-					"body": "{\n    \"message\": \"Invalid test name. It must be a string\"\n}"
+					"body": "{\n    \"message\": \"Invalid test name. It must be a string, and can only contain letters, numbers and underscores.\"\n}"
+				}
+			]
+		},
+		{
+			"name": "Start new test Copy",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{BASE_URL}}/get-test-list",
+					"host": [
+						"{{BASE_URL}}"
+					],
+					"path": [
+						"get-test-list"
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "Tests names returned",
+					"originalRequest": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{BASE_URL}}/get-test-list",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"get-test-list"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "X-Powered-By",
+							"value": "Express"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json; charset=utf-8"
+						},
+						{
+							"key": "Content-Length",
+							"value": "59"
+						},
+						{
+							"key": "ETag",
+							"value": "W/\"3b-/wyaFVLCILc1zyGNZJHfMO4bhiA\""
+						},
+						{
+							"key": "Date",
+							"value": "Mon, 14 Aug 2023 02:59:22 GMT"
+						},
+						{
+							"key": "Connection",
+							"value": "keep-alive"
+						},
+						{
+							"key": "Keep-Alive",
+							"value": "timeout=5"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"testNames\": [\n        \"Example.png\",\n        \"Example2.png\",\n        \"Example3.png\"\n    ]\n}"
 				}
 			]
 		},
