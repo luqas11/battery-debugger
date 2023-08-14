@@ -1,29 +1,31 @@
 <!DOCTYPE html>
-<html lang='es'>
-    <head>
-        <link rel="preconnect" href="https://fonts.googleapis.com">
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-        <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400&display=swap" rel="stylesheet">
-        <link rel="stylesheet" type="text/css" href="styles.css">
-        <script src="scripts.js"></script>
-        <title>Battery debugger</title>
-        <meta charset="utf-8"/>
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
-    </head>
+<html lang="es">
+  <head>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" type="text/css" href="styles.css" />
+    <script src="scripts.js"></script>
+    <title>Battery debugger</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+  </head>
 
-    <body>
-        <div id="container">
-            <h1 id="title">Battery debugger</h1>
-            <div id="selectorContainer">
-                <span>Select a test to see it's graph:</span>
-                <select id="testSelector" name="select" disabled>
-                    <option value="" disabled selected>Select an option</option>
-                </select>
-                <button id="getButton" onclick=getGraph()>Get graph</button>
-            </div>
-            <span id="errorMessage"></span>
-            <div id="plotContainer">
-            </div>
-        </div>
-    </body>
+  <body>
+    <div id="container">
+      <h1 id="title">Battery debugger</h1>
+      <div id="selectorContainer">
+        <span>Select a test to see it's graph:</span>
+        <select id="testSelector" name="select" disabled>
+          <option value="" disabled selected>Select an option</option>
+        </select>
+        <button id="getButton" onclick="getGraph()">Get graph</button>
+      </div>
+      <span id="errorMessage"></span>
+      <div id="plotContainer"></div>
+    </div>
+  </body>
 </html>
