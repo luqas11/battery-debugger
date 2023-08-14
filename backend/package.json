@@ -1,14 +1,12 @@
 {
   "name": "backend",
   "version": "0.0.1",
-  "description": "Backend for the battery-debugger project",
-  "main": "app.js",
   "scripts": {
     "start": "npx nodemon ./app.ts",
     "pm2-start": "pm2 start 'npm start' --name backend"
   },
   "author": "luqas11",
-  "license": "ISC",
+  "license": "UNLICENSED",
   "devDependencies": {
     "@tsconfig/node-lts": "^18.12.3",
     "@types/express": "^4.17.17",
