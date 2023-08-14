@@ -17,14 +17,25 @@
   <body>
     <div id="container">
       <h1 id="title">Battery debugger</h1>
+      <div id="startContainer">
+        <span
+          >No test is currently in progress. To start a new one, write a
+          name:</span
+        >
+        <input type="text" id="testNameInput" />
+        <button id="startButton" onclick="startTest()">Start test</button>
+      </div>
+      <div id="stopContainer">
+        <span id="stopText"></span>
+        <button id="stopButton" onclick="stopTest()">Stop test</button>
+      </div>
       <div id="selectorContainer">
         <span>Select a test to see it's graph:</span>
-        <select id="testSelector" name="select" disabled>
-          <option value="" disabled selected>Select an option</option>
-        </select>
+        <select id="testSelector" name="select"></select>
         <button id="getButton" onclick="getGraph()">Get graph</button>
       </div>
       <span id="errorMessage"></span>
+      <span id="statusErrorMessage"></span>
       <div id="plotContainer"></div>
     </div>
   </body>

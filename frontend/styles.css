@@ -1,8 +1,15 @@
-#testSelector {
-  width: 200px;
+h1 {
+  margin-bottom: 0px;
 }
 
-#errorMessage {
+select,
+input {
+  width: 80%;
+  height: 25px;
+}
+
+#errorMessage,
+#statusErrorMessage {
   color: #ee3333;
   display: none;
   font-family: "Roboto", sans-serif;
@@ -11,7 +18,7 @@
   max-width: 400px;
 }
 
-#getButton {
+button {
   width: 120px;
   height: 40px;
   background-color: #252570;
@@ -29,7 +36,9 @@ span {
   font-weight: 200;
 }
 
-#selectorContainer {
+#selectorContainer,
+#startContainer,
+#stopContainer {
   display: flex;
   flex-direction: column;
   gap: 10px;
@@ -37,6 +46,12 @@ span {
   background-color: #1d1d40;
   padding: 20px;
   border-radius: 10px;
+  width: 250px;
+}
+
+#startContainer,
+#stopContainer {
+  display: none;
 }
 
 #title {

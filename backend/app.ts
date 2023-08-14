@@ -2,6 +2,7 @@ import express, { RequestHandler } from "express";
 import fs from "fs/promises";
 import { exec } from "child_process";
 import "dotenv/config";
+import cors from "cors";
 
 import {
   formatFileName,
@@ -14,6 +15,7 @@ const hostname = process.env.HOSTNAME || "";
 const port = 3000;
 
 app.use(express.json());
+app.use(cors({ origin: "*" }));
 
 /**
  * Logger to print incoming request's method and path.
@@ -26,9 +28,19 @@ app.use(logger);
 
 app.use("/records", express.static("../records"));
 
+app.get("/get-test-status", async (req, res) => {
+  try {
+    const currentTestName = await getCurrentTestName();
+    res.json({ currentTestName: currentTestName });
+  } catch (err) {
+    res.status(500).json({
+      message: "An unexpected error has occurred.",
+    });
+  }
+});
+
 app.get("/get-test-list", async (req, res) => {
   try {
-    res.setHeader("Access-Control-Allow-Origin", "*");
     const recordsDir = await fs.readdir("../records");
     const testNames = recordsDir.filter(
       (name) => name.slice(name.length - 4, name.length) === ".png"
