@@ -24,6 +24,23 @@ const logger: RequestHandler = (req, res, next) => {
 };
 app.use(logger);
 
+app.use("/records", express.static("../records"));
+
+app.get("/get-test-list", async (req, res) => {
+  try {
+    res.setHeader("Access-Control-Allow-Origin", "*");
+    const recordsDir = await fs.readdir("../records");
+    const testNames = recordsDir.filter(
+      (name) => name.slice(name.length - 4, name.length) === ".png"
+    );
+    res.json({ testNames: testNames });
+  } catch (err) {
+    res.status(500).json({
+      message: "An unexpected error has occurred.",
+    });
+  }
+});
+
 app.post("/save-reading", async (req, res) => {
   try {
     const currentTestName = await getCurrentTestName();

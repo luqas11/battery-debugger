@@ -1,19 +1,40 @@
+// Base URL of the backend
+const BASE_URL = 'http://192.168.0.11:3000'
+
 /**
- * Function to validate the test name input and display the graph for the given test name on the page.
+ * Fetches the tests names list from the backend, and loads it into the test selector.
  */
-function getGraph() {
+const fetchTestList = () => {
+    fetch(BASE_URL + "/get-test-list").then(response => {
+        if (!response.ok) {
+            throw new Error();
+        }
+        return response.json();
+    })
+    .then(data => {
+        const testSelector = document.getElementById("testSelector");
+        data.testNames.forEach((element, index, array) =>{
+            const newOption = document.createElement("option");
+            newOption.value = element;
+            newOption.textContent = element;
+            testSelector.appendChild(newOption);
+        });
+        testSelector.removeAttribute("disabled");  
+    })
+    .catch(error => {
+        const errorMessage = document.getElementById("errorMessage");
+        errorMessage.style.display = "block";
+        errorMessage.textContent  = "The test list couldn't be retrieved. Try reloading the page, or checking the server status.";
+    });
+};
+
+/**
+ * Displays the graph for the selected test name on the page.
+ */
+const getGraph = () => {
     // Hide all error messages
     const errorMessage = document.getElementById("errorMessage");
     errorMessage.style.display = "none";
-
-    // Validate and sanitize the test name input
-    const testName = document.getElementById('nameInput').value
-    const validationRegex = /[^\w\d.]/;
-    if (!testName || typeof testName !== "string" || testName.length === 0 || validationRegex.test(testName)) {
-        errorMessage.style.display = "block";
-        errorMessage.textContent  = "Invalid graph name. The name can only contain letters, numbers and underscores.";
-        return;
-    }
 
     // Remove any graph being displayed
     const targetDiv = document.getElementById("plotContainer");
@@ -22,12 +43,16 @@ function getGraph() {
     }
 
     // Show the selected graph
+    const testSelector = document.getElementById("testSelector");
+    const testName = testSelector.options[testSelector.selectedIndex]?.value;
     const newImage = document.createElement("img");
-    newImage.src = `../records/${testName}.png`;  
+    newImage.src = `${BASE_URL}/records/${testName}`;  
     targetDiv.appendChild(newImage);
     newImage.onerror = () => {
         newImage.remove();
         errorMessage.style.display = "block";
-        errorMessage.textContent  = "The graph couldn't be loaded. Maybe the file doesn't exists, or there is a problem in the connection with the server.";
+        errorMessage.textContent  = "The graph couldn't be loaded. Try reloading the page, or checking the server status.";
     };
 }
+
+fetchTestList();

@@ -15,8 +15,10 @@
         <div id="container">
             <h1 id="title">Battery debugger</h1>
             <div id="selectorContainer">
-                <span>Enter the name of a test to see it's graph:</span>
-                <input id="nameInput" type="text"/>
+                <span>Select a test to see it's graph:</span>
+                <select id="testSelector" name="select" disabled>
+                    <option value="" disabled selected>Select an option</option>
+                </select>
                 <button id="getButton" onclick=getGraph()>Get graph</button>
             </div>
             <span id="errorMessage"></span>

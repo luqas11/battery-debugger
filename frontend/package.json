@@ -1,0 +1,14 @@
+{
+  "name": "frontend",
+  "version": "0.0.1",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "http-server -p 80 -a 192.168.0.11 -c-1"
+  },
+  "author": "luqas11",
+  "license": "ISC",
+  "dependencies": {
+    "http-server": "^14.1.1"
+  }
+}

@@ -1,3 +1,7 @@
+#testSelector {
+    width: 200px;
+}
+
 #errorMessage {
     color: #EE3333;
     display: none;
@@ -30,7 +34,6 @@ span {
     background-color: #1D1D40;
     padding: 20px;
     border-radius: 10px;
-    width: min-content;
 }
 #title {
     color: #E6E6E6;
@@ -47,7 +50,12 @@ span {
 #plotContainer {
     display: flex;
     flex-direction: column;
+    width: 100%;
     max-width: 800px;
+    align-items: center;
+}
+img {
+    width: 90%;
 }
 body {
     margin: 0;
