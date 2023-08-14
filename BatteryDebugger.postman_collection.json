@@ -421,7 +421,7 @@
 			]
 		},
 		{
-			"name": "Start new test Copy",
+			"name": "Get test list",
 			"request": {
 				"method": "GET",
 				"header": [],
@@ -486,6 +486,134 @@
 					],
 					"cookie": [],
 					"body": "{\n    \"testNames\": [\n        \"Example.png\",\n        \"Example2.png\",\n        \"Example3.png\"\n    ]\n}"
+				}
+			]
+		},
+		{
+			"name": "Get test status",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{BASE_URL}}/get-test-status",
+					"host": [
+						"{{BASE_URL}}"
+					],
+					"path": [
+						"get-test-status"
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "No test in progress",
+					"originalRequest": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{BASE_URL}}/get-test-status",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"get-test-status"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "X-Powered-By",
+							"value": "Express"
+						},
+						{
+							"key": "Access-Control-Allow-Origin",
+							"value": "*"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json; charset=utf-8"
+						},
+						{
+							"key": "Content-Length",
+							"value": "2"
+						},
+						{
+							"key": "ETag",
+							"value": "W/\"2-vyGp6PvFo4RvsFtPoIWeCReyIC8\""
+						},
+						{
+							"key": "Date",
+							"value": "Mon, 14 Aug 2023 22:32:43 GMT"
+						},
+						{
+							"key": "Connection",
+							"value": "keep-alive"
+						},
+						{
+							"key": "Keep-Alive",
+							"value": "timeout=5"
+						}
+					],
+					"cookie": [],
+					"body": "{}"
+				},
+				{
+					"name": "Test in progress",
+					"originalRequest": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{BASE_URL}}/get-test-status",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"get-test-status"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "X-Powered-By",
+							"value": "Express"
+						},
+						{
+							"key": "Access-Control-Allow-Origin",
+							"value": "*"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json; charset=utf-8"
+						},
+						{
+							"key": "Content-Length",
+							"value": "29"
+						},
+						{
+							"key": "ETag",
+							"value": "W/\"1d-PZjzX/6cP5U2OONQDkAmGmyAwsI\""
+						},
+						{
+							"key": "Date",
+							"value": "Mon, 14 Aug 2023 22:33:27 GMT"
+						},
+						{
+							"key": "Connection",
+							"value": "keep-alive"
+						},
+						{
+							"key": "Keep-Alive",
+							"value": "timeout=5"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"currentTestName\": \"Example\"\n}"
 				}
 			]
 		},
