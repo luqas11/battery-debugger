@@ -71,9 +71,15 @@ app.post("/start-test", async (req, res) => {
     }
 
     const name = req.body.name;
-    if (!name || typeof name !== "string" || name.length === 0) {
+    const sanitizationRegex = /[^\w\d]/;
+    if (
+      typeof name !== "string" ||
+      name === "" ||
+      sanitizationRegex.test(name)
+    ) {
       res.status(400).json({
-        message: "Invalid test name. It must be a string",
+        message:
+          "Invalid test name. It must be a string, and can only contain letters, numbers and underscores.",
       });
       return;
     }
