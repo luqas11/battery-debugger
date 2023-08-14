@@ -4,6 +4,8 @@
         <link rel="preconnect" href="https://fonts.googleapis.com">
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
         <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400&display=swap" rel="stylesheet">
+        <link rel="stylesheet" type="text/css" href="styles.css">
+        <script src="scripts.js"></script>
         <title>Battery debugger</title>
         <meta charset="utf-8"/>
         <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -21,103 +23,5 @@
             <div id="plotContainer">
             </div>
         </div>
-
-        <script>
-            function getGraph() {
-                // Hide all error messages
-                const errorMessage = document.getElementById("errorMessage");
-                errorMessage.style.display = "none";
-
-                // Validate and sanitize the test name input
-                const testName = document.getElementById('nameInput').value
-                const validationRegex = /[^\w\d.]/;
-                if (!testName || typeof testName !== "string" || testName.length === 0 || validationRegex.test(testName)) {
-                    errorMessage.style.display = "block";
-                    errorMessage.textContent  = "Invalid graph name. The name can only contain letters, numbers and underscores.";
-                    return;
-                }
-
-                // Remove any graph being displayed
-                const targetDiv = document.getElementById("plotContainer");
-                if (targetDiv.firstChild) {
-                    targetDiv.removeChild(targetDiv.firstChild);                
-                }
-
-                // Show the selected graph
-                const newImage = document.createElement("img");
-                newImage.src = `../records/${testName}.png`;  
-                targetDiv.appendChild(newImage);
-                newImage.onerror = () => {
-                    newImage.remove();
-                    errorMessage.style.display = "block";
-                    errorMessage.textContent  = "The graph couldn't be loaded. Maybe the file don't exists, or there is a problem in the connection to the server.";
-                };
-            }
-        </script>
-
-        <style>
-            #errorMessage{
-                color: #EE3333;
-                display: none;
-                font-family: 'Roboto', sans-serif;
-                font-weight: 400;
-                font-size: medium;
-                max-width: 400px;                
-            }
-            #getButton {
-                width: 120px;
-                height: 40px;
-                background-color: #252570;
-                border-radius: 10px;
-                color: #E6E6E6;
-                font-family: 'Roboto', sans-serif;
-                font-weight: 400;
-                font-size: medium;
-            }
-            span {
-                color: #E6E6E6;
-                text-align: center;
-                font-family: 'Roboto', sans-serif;
-                font-weight: 200;
-            }
-            #selectorContainer {
-                display: flex;
-                flex-direction: column;
-                gap: 10px;
-                align-items: center;
-                background-color: #1D1D40;
-                padding: 20px;
-                border-radius: 10px;
-                width: min-content;
-            }
-            #title {
-                color: #E6E6E6;
-                text-align: center;
-                font-family: 'Roboto', sans-serif;
-                font-weight: 300;
-            }
-            #container {
-                display: flex;
-                flex-direction: column;
-                align-items: center;
-                gap: 20px;
-            }
-            #plotContainer {
-                display: flex;
-                flex-direction: column;
-                max-width: 800px;
-            }
-            body {
-                margin: 0;
-                background-color: #0A0A26;
-                display: flex;
-                justify-content: center;
-            }
-            html,
-            body,
-            #root {
-                height: 100%;
-            }
-        </style>
     </body>
 </html>
