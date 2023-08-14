@@ -4,7 +4,8 @@
   "description": "Backend for the battery-debugger project",
   "main": "app.js",
   "scripts": {
-    "start": "npx nodemon ./app.ts"
+    "start": "npx nodemon ./app.ts",
+    "pm2-start": "pm2 start 'npm start' --name backend"
   },
   "author": "luqas11",
   "license": "ISC",
