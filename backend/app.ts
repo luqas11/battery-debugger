@@ -18,7 +18,7 @@ app.use(express.json());
 app.use(cors({ origin: "*" }));
 
 /**
- * Logger to print incoming request's method and path.
+ * Logger used to print incoming request's method and path.
  */
 const logger: RequestHandler = (req, res, next) => {
   console.log(req.method + " " + req.path);
