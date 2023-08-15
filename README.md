@@ -32,3 +32,16 @@ The procedure to measure a charge curve should be:
 7. Disconnect the `ESP`
 8. Navigate to the webpage and stop the test (to tell the backend to stop saving readings in that file and generate a `PNG`)
 9. Navigate to the webpage and see the graph
+
+### Examples:
+Some examples of real battery tests, viewed on the webpage.  
+
+#### Charge curve example:  
+
+<img src="charge_demo.png" height="50%" width="50%">  
+
+#### Discharge curve example:  
+
+<img src="discharge_demo.png" height="50%" width="50%">
+
+
