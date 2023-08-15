@@ -1,5 +1,5 @@
-// Base URL of the backend
-const BASE_URL = "http://192.168.0.11:3000";
+// Base backend URL
+const BASE_URL = "http://" + BACKEND_IP + ":" + PORT;
 
 /**
  * Stops the current test.
