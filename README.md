@@ -38,10 +38,10 @@ Some examples of real battery tests, viewed on the webpage.
 
 #### Charge curve example:  
 
-<img src="charge_demo.png" height="50%" width="50%">  
+<img src="charge_demo.png" height="75%" width="75%">  
 
 #### Discharge curve example:  
 
-<img src="discharge_demo.png" height="50%" width="50%">
+<img src="discharge_demo.png" height="75%" width="75%">
 
 
