@@ -23,7 +23,7 @@ export const formatFileName = (name: string) => {
 /**
  *
  * @param name
- * @returns wether a test with a given name exists or not.
+ * @returns whether a test with a given name exists or not.
  */
 export const isTestNameAvailable = async (name: string) => {
   const recordsDir = await fs.readdir("../records");
