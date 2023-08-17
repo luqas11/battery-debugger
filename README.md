@@ -6,7 +6,7 @@ Have a way to track the health state of batteries, based on periodically measure
 ### Developed solution:
 - During the test, an `ESP8266` based board takes periodic readings of the battery voltage through it's analog input, and sends the values to a backend.
 - A `NodeJS` backend takes those readings, and saves them in a `CSV` file.
-- When the test is complete, the `NodeJS` backend starts a `Python` script that plots the readings as a graph in a `PNG` image, using `matplotlib`
+- When the test is complete, the `NodeJS` backend starts a `Python` script that plots the readings as a graph in a `PNG` image, using `matplotlib`.
 - Finally, a static webpage served with `http-server` allows the user to see the graphs. That webpage also has interactive menus to start and stops tests fron there.
 
 Those projects, are in the `backend`, `frontend` and `firmware` directories.  
