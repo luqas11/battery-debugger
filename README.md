@@ -1,7 +1,7 @@
 # battery-debugger
 
 ### Objective:
-Have a way to track the health state of batteries, based on periodically measure the charge and discharge curves under constant test conditions. Specifically, this project aims to know the degradation grade of a Lead Acid battery which is working along a solar panel installation. Taking the curves periodically (maybe annualy, or semi-anually), a simple comparisson between them will show the capacity loss. The test conditions to measure the curves should always be the same to ensure comparability (e.g. same circuit load for discharge, same weather and sun position for charge, etc.). Besides that specific objective, this project could also be useful to test batteries of other types and other appliances.
+Have a way to track the health state of batteries, based on periodically measure the charge and discharge curves under constant test conditions. Specifically, this project aims to know the degradation grade of a Lead Acid battery which is working along a solar panel installation. Taking the curves periodically (maybe annualy, or semi-annually), a simple comparisson between them will show the capacity loss. The test conditions to measure the curves should always be the same to ensure comparability (e.g. same circuit load for discharge, same weather and sun position for charge, etc.). Besides that specific objective, this project could also be useful to test batteries of other types and other appliances.
 
 ### Developed solution:
 - During the test, an `ESP8266` based board takes periodic readings of the battery voltage through it's analog input, and sends the values to a backend.
