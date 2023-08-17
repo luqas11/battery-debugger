@@ -11,7 +11,7 @@ import {
 } from "./utils";
 
 const app = express();
-const hostname = process.env.HOSTNAME || "";
+const hostname = process.env.HOST_URL || "";
 const port = 3000;
 
 app.use(express.json());
@@ -28,7 +28,7 @@ app.use(logger);
 
 app.use("/records", express.static("../records"));
 
-app.get("/get-test-status", async (req, res) => {
+app.get("/get-current-test-name", async (req, res) => {
   try {
     const currentTestName = await getCurrentTestName();
     res.json({ currentTestName: currentTestName });

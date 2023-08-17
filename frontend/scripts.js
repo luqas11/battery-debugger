@@ -117,8 +117,8 @@ const fetchTestStatus = () => {
   startContainer.style.display = "none";
   stopContainer.style.display = "none";
 
-  // Fetches the current test status, and displays either a container or an error message if something fails
-  fetch(BASE_URL + "/get-test-status")
+  // Fetches the current test name, and displays either a container or an error message if something fails
+  fetch(BASE_URL + "/get-current-test-name")
     .then((response) => {
       if (!response.ok) {
         throw new Error();

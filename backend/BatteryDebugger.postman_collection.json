@@ -490,17 +490,17 @@
 			]
 		},
 		{
-			"name": "Get test status",
+			"name": "Get current test name",
 			"request": {
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "{{BASE_URL}}/get-test-status",
+					"raw": "{{BASE_URL}}/get-current-test-name",
 					"host": [
 						"{{BASE_URL}}"
 					],
 					"path": [
-						"get-test-status"
+						"get-current-test-name"
 					]
 				}
 			},
