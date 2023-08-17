@@ -12,7 +12,7 @@ const port = 3000;
 app.use(logger);
 app.use(cors({ origin: "*" }));
 app.use(express.json());
-app.use("/records", express.static("../../records"));
+app.use("/records", express.static("./../records"));
 
 app.use(router);
 
