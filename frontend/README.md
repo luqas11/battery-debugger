@@ -19,7 +19,7 @@ To stop the frontend being a background process, use:
 `pm2 stop 0`
 
 ### Examples:
-Some examples of the frontend functions.
+Some examples of the frontend menus.
 
 #### No test in progress:  
 
