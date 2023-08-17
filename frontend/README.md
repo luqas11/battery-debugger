@@ -17,3 +17,18 @@ To serve the frontend as a background process (useful to free the terminal on th
 
 To stop the frontend being a background process, use:  
 `pm2 stop 0`
+
+### Examples:
+Some examples of the frontend functions.
+
+#### No test in progress:  
+
+<img src="examples/example1.png" height="60%" width="60%">  
+
+#### Test in progress:  
+
+<img src="examples/example2.png" height="60%" width="60%">  
+
+#### Seeing a test graph:  
+
+<img src="examples/example3.png" height="60%" width="60%">
