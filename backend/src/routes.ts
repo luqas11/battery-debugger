@@ -1,8 +1,7 @@
-import express, { RequestHandler } from "express";
+import express from "express";
 import fs from "fs/promises";
+import { promisify } from "util";
 import { exec } from "child_process";
-import "dotenv/config";
-import cors from "cors";
 
 import {
   formatFileName,
@@ -10,25 +9,12 @@ import {
   isTestNameAvailable,
 } from "./utils";
 
-const app = express();
-const hostname = process.env.HOST_URL || "";
-const port = 3000;
-
-app.use(express.json());
-app.use(cors({ origin: "*" }));
+const router = express.Router();
 
 /**
- * Logger used to print incoming request's method and path.
+ * Gets the name of the test that is currently in progress. If none, returns an empty object.
  */
-const logger: RequestHandler = (req, res, next) => {
-  console.log(req.method + " " + req.path);
-  next();
-};
-app.use(logger);
-
-app.use("/records", express.static("../records"));
-
-app.get("/get-current-test-name", async (req, res) => {
+router.get("/get-current-test-name", async (req, res) => {
   try {
     const currentTestName = await getCurrentTestName();
     res.json({ currentTestName: currentTestName });
@@ -39,9 +25,12 @@ app.get("/get-current-test-name", async (req, res) => {
   }
 });
 
-app.get("/get-test-list", async (req, res) => {
+/**
+ * Gets the list of names of the existing test graphs.
+ */
+router.get("/get-test-list", async (req, res) => {
   try {
-    const recordsDir = await fs.readdir("../records");
+    const recordsDir = await fs.readdir("./../records");
     const testNames = recordsDir.filter(
       (name) => name.slice(name.length - 4, name.length) === ".png"
     );
@@ -53,7 +42,11 @@ app.get("/get-test-list", async (req, res) => {
   }
 });
 
-app.post("/save-reading", async (req, res) => {
+/**
+ * Saves a voltage and time reading. Both values should be numbers, and a test must be in progress.
+ * Returns the corresponding error if any of those conditions are not met.
+ */
+router.post("/save-reading", async (req, res) => {
   try {
     const currentTestName = await getCurrentTestName();
     if (!currentTestName) {
@@ -75,7 +68,7 @@ app.post("/save-reading", async (req, res) => {
 
     const content = `${time},${voltage}\n`;
     await fs.writeFile(
-      `../records/${formatFileName(currentTestName)}`,
+      `./../records/${formatFileName(currentTestName)}`,
       content,
       {
         flag: "a",
@@ -89,7 +82,11 @@ app.post("/save-reading", async (req, res) => {
   }
 });
 
-app.post("/start-test", async (req, res) => {
+/**
+ * Starts a new test, given a name. The name can only contain numbers, letters and underscores.
+ * If a test is already in progress or the given name is invalid or already taken, returns an error.
+ */
+router.post("/start-test", async (req, res) => {
   try {
     const currentTestName = await getCurrentTestName();
     if (currentTestName) {
@@ -121,7 +118,10 @@ app.post("/start-test", async (req, res) => {
       return;
     }
 
-    await fs.writeFile(`../records/${formatFileName(name)}`, "Time,Voltage\n");
+    await fs.writeFile(
+      `./../records/${formatFileName(name)}`,
+      "Time,Voltage\n"
+    );
     res.json({ message: `New test started with name "${name}".` });
   } catch (err) {
     res.status(500).json({
@@ -130,7 +130,11 @@ app.post("/start-test", async (req, res) => {
   }
 });
 
-app.post("/end-test", async (req, res) => {
+/**
+ * Ends the current test. If no test is in progress, returns an error.
+ * After ending the test, starts the python script to plot the test values.
+ */
+router.post("/end-test", async (req, res) => {
   try {
     const currentTestName = await getCurrentTestName();
     if (!currentTestName) {
@@ -141,16 +145,15 @@ app.post("/end-test", async (req, res) => {
     }
 
     await fs.rename(
-      `../records/${formatFileName(currentTestName)}`,
-      `../records/${currentTestName}.csv`
+      `./../records/${formatFileName(currentTestName)}`,
+      `./../records/${currentTestName}.csv`
     );
 
-    exec(
-      `python3 ./curve_plotter.py "${currentTestName}"`,
-      (error, stdout, stderr) => {
-        if (error) console.error(`Error executing curve_plotter.py: ${error}`);
-      }
-    );
+    try {
+      await promisify(exec)(`python3 ./curve_plotter.py "${currentTestName}"`);
+    } catch (error) {
+      console.error(`Error executing curve_plotter.py: ${error}`);
+    }
 
     res.json({
       message: `Test with name "${currentTestName}" has been stopped.`,
@@ -162,6 +165,4 @@ app.post("/end-test", async (req, res) => {
   }
 });
 
-app.listen(port, hostname, () => {
-  console.log(`App listening on http://${hostname}:${port}`);
-});
+export default router;

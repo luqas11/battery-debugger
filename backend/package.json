@@ -2,7 +2,7 @@
   "name": "backend",
   "version": "0.0.1",
   "scripts": {
-    "start": "npx nodemon ./app.ts",
+    "start": "npx nodemon ./src/app.ts",
     "pm2-start": "pm2 start 'npm start' --name backend"
   },
   "author": "luqas11",

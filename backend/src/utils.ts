@@ -4,7 +4,7 @@ import fs from "fs/promises";
  * @returns the name of the current test in progress. If none is, returns undefined.
  */
 export const getCurrentTestName = async () => {
-  const recordsDir = await fs.readdir("../records");
+  const recordsDir = await fs.readdir("./../records");
   const fileName = recordsDir.find((file) => file.startsWith("current_"));
 
   if (!fileName) return;
@@ -26,7 +26,7 @@ export const formatFileName = (name: string) => {
  * @returns whether a test with a given name exists or not.
  */
 export const isTestNameAvailable = async (name: string) => {
-  const recordsDir = await fs.readdir("../records");
+  const recordsDir = await fs.readdir("./../records");
   const fileName = recordsDir.find((file) => file === `${name}.csv`);
 
   return !fileName;
