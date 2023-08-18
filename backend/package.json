@@ -1,6 +1,6 @@
 {
   "name": "backend",
-  "version": "0.0.1",
+  "version": "1.0.0",
   "scripts": {
     "start": "npx nodemon ./src/app.ts",
     "pm2-start": "pm2 start 'npm start' --name backend"

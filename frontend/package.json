@@ -1,6 +1,6 @@
 {
   "name": "frontend",
-  "version": "0.0.1",
+  "version": "1.0.0",
   "scripts": {
     "start": "bash -c 'http-server -p 8000 -a $(node -e \"$(cat env.js); console.log(HOST_IP);\") -c-1'",
     "pm2-start": "pm2 start 'npm start' --name frontend"
