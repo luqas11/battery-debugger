@@ -2,3 +2,5 @@
 !.gitignore
 !Example.csv
 !Example.png
+!/historical/
+!/historical/*
