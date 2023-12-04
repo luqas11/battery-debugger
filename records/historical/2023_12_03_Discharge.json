@@ -1,0 +1,14 @@
+{
+    "test": {
+        "description": "Battery discharge under a fixed load, from full charge to empty.",
+        "date": "2023-12-03"
+    },
+    "load": {
+        "value": 0.33,
+        "description": "Load current, measured in Amperes."
+    },
+    "battery": {
+        "age": 2,
+        "description": "Battery age, counted in months."
+    }
+}
