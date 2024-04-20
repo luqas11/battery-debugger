@@ -8,7 +8,7 @@
         "description": "Load current, measured in Amperes."
     },
     "battery": {
-        "age": 1,
+        "age": 6,
         "description": "Battery age, counted in months."
     }
 }
