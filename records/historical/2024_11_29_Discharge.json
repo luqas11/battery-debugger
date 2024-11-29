@@ -1,7 +1,7 @@
 {
     "test": {
         "description": "Battery discharge under a fixed load, from full charge to empty.",
-        "date": "2024-11-16"
+        "date": "2024-11-29"
     },
     "load": {
         "value": 0.33,
