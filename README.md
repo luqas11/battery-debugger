@@ -7,7 +7,7 @@ Have a way to track the health state of batteries, based on periodically measure
 - During the test, an **ESP8266** based board takes periodic readings of the battery voltage through it's analog input, and sends the values to a backend.
 - A **NodeJS** backend takes those readings, and saves them in a **CSV** file.
 - When the test is complete, the **NodeJS** backend runs a **Python** script that plots the readings as a graph in a **PNG** image, using **matplotlib**.
-- Finally, a static webpage served with **http-server** allows the user to see the graphs. That webpage also has interactive menus to start and stops tests fron there.
+- Finally, a static webpage served with **http-server** allows the user to see the graphs. That webpage also has interactive menus to start and stops tests from there.
 
 Those projects, are in the `backend`, `frontend` and `firmware` directories.  
 The graphs images are saved in the `records` directory.
@@ -17,13 +17,13 @@ The procedure to measure a discharge curve should be:
 1. Ensure that there is nothing charging the battery (in my specific case, that the solar pannel is disconnected)
 2. Connect a fixed load to the battery terminals
 3. Connect the **ESP** to the battery terminals
-4. Navigate to the webpage and start a new test (to tell the backend to save the readings in a new file)
+4. Navigate to the webpage and start a new test (to tell the backend to start saving new readings)
 5. Wait until the battery is depleted
 6. Disconnect the load and the **ESP**
-7. Navigate to the webpage and stop the test (to tell the backend to stop saving readings in that file and generate a **PNG**)
+7. Navigate to the webpage and stop the test (to tell the backend to stop saving readings and generate a **PNG**)
 8. Navigate to the webpage and see the graph
 
 ### Example:
 Example of real battery test, viewed on the webpage.  
 
-<img src="discharge_example.png" height="75%" width="75%">
+<img src="example.png" height="75%" width="75%">
