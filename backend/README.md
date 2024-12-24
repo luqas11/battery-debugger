@@ -61,7 +61,7 @@ To start the Node app, use:
 `npm start`
 
 To start the Node app as a background process (useful to free the terminal on the remote server), use:  
-`pm2 start "npm start"`, or `pm2 start 0` if it's already listed.
+`npm run pm2-start`
 
 To stop the Node app being a background process, use:  
 `pm2 stop 0`
