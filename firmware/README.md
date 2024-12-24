@@ -10,6 +10,3 @@ Defining the constant `k` as:
 `k = Reference voltage / Reference analog value`  
 
 Where the reference values could be taken applying a reference external voltage. Those values can be taken giving a known extenal voltage to the input, and printing the analog value that corresponds to that specific voltage. With that, `k` can be defined and the conversion can be done. Following that procedure the device can be calibrated. To get a better calibration, use a reference voltage similar to the ones that are going to be measured.
-
-### Development notes:
-All the development, monitoring and the sketch update are made using the official **Arduino VSCode extension**.
