@@ -7,7 +7,7 @@ With it, the user can:
 - See any saved test graph
 
 ### Development notes:
-A `env.js` file is required to define the URL where the backend and the frontend are served. Copy the `env.js.example`, rename it, and replace the variable with the corresponding value.  
+An `env.js` file is required to define the URL where the backend and the frontend are served. Copy the `env.js.example`, rename it, and replace the variables with the corresponding values.  
 
 To serve the frontend, use:  
 `npm start`
