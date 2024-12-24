@@ -60,7 +60,7 @@ A `.env` file is required to define the URL where the backend is served. Copy th
 To start the Node app, use:  
 `npm start`
 
-To start the Node app as a background process (useful to free the terminal on the remote server), use:  
+To start the Node app as a background process (useful to free the terminal on a remote server), use:  
 `npm run pm2-start`
 
 To connect to a remote server over ssh, use:  
