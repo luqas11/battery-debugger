@@ -11,6 +11,7 @@ Have a way to track the health state of batteries, based on periodically measure
 
 Those projects, are in the `backend`, `frontend` and `firmware` directories.  
 The graphs images are saved in the `records` directory.
+The wiring diagram to connect the **ESP** to the battery is in the `circuit` directory
 
 ### Usage:
 The procedure to measure a discharge curve should be:
