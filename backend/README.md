@@ -63,9 +63,6 @@ To start the Node app, use:
 To start the Node app as a background process (useful to free the terminal on the remote server), use:  
 `npm run pm2-start`
 
-To stop the Node app being a background process, use:  
-`pm2 stop 0`
-
 To connect to a remote server over ssh, use:  
 `ssh username@hostname`
 
