@@ -10,7 +10,7 @@ Have a way to track the health state of batteries, based on periodically measure
 - Finally, a static webpage served with **http-server** allows the user to see the graphs. That webpage also has interactive menus to start and stops tests from there.
 
 Those projects, are in the `backend`, `frontend` and `firmware` directories.  
-The graphs images are saved in the `records` directory.
+The graphs images are saved in the `records` directory.  
 The wiring diagram to connect the **ESP** to the battery is in the `circuit` directory
 
 ### Usage:
