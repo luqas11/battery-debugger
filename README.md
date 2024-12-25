@@ -1,19 +1,19 @@
 # battery-debugger
 
-### Objective:
+### Objective
 Have a way to track the health state of batteries, based on periodically measure the discharge curves under constant load conditions. Specifically, this project aims to know the degradation grade of a Lead Acid battery which is working along a solar panel installation. Taking the curves periodically (maybe annualy, or semi-annually), a simple comparisson between them will show the capacity loss. The load conditions to measure the curves should always be the same, to ensure comparability. Besides that specific objective, this project could also be useful to test batteries of other types and other appliances.
 
-### Developed solution:
+### Developed solution
 - During the test, an **ESP8266** based board takes periodic readings of the battery voltage through it's analog input, and sends the values to a backend.
 - A **NodeJS** backend takes those readings, and saves them in a **CSV** file.
 - When the test is complete, the **NodeJS** backend runs a **Python** script that plots the readings as a graph in a **PNG** image, using **matplotlib**.
 - Finally, a static webpage served with **http-server** allows the user to see the graphs. That webpage also has interactive menus to start and stops tests from there.
 
-Those projects, are in the `backend`, `frontend` and `firmware` directories.  
+Those projects are in the `backend`, `frontend` and `firmware` directories.  
 The graphs images are saved in the `records` directory.  
 The wiring diagram to connect the **ESP** to the battery is in the `circuit` directory
 
-### Usage:
+### Usage
 The procedure to measure a discharge curve should be:
 1. Ensure that there is nothing charging the battery (in my specific case, that the solar pannel is disconnected)
 2. Connect a fixed load to the battery terminals
