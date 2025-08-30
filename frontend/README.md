@@ -1,5 +1,5 @@
 # Frontend
-This plain **HTML**, **JS** and **CSS** frontend allows the end-user to manage and the the current and past tests, and it's served using the **http-server** package.  
+This plain **HTML**, **JS** and **CSS** frontend allows the end-user to manage and see the current and past tests, and it's served using the **http-server** package.  
 
 With it, the user can:
 - Start a new test, defining it's name
