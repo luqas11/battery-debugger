@@ -1,0 +1,22 @@
+info:
+  name: save-reading
+  type: http
+  seq: 4
+
+http:
+  method: POST
+  url: "{{BASE_URL}}/save-reading"
+  body:
+    type: json
+    data: |-
+      {
+        "time": 0.5,
+        "voltage": 12.3
+      }
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5

@@ -1,0 +1,245 @@
+:root {
+  --bg: #121212;
+  --card-bg: #222222;
+  --text-primary: #e0e0e0;
+  --text-secondary: #9a9a9a;
+  --border: #333333;
+  --input-bg: #2c2c2c;
+  --input-border: #444444;
+  --accent-green: #4caf50;
+  --accent-green-hover: #66bb6a;
+  --accent-red: #e57373;
+  --accent-red-hover: #ef9a9a;
+  --accent-neutral: #555555;
+  --accent-neutral-hover: #666666;
+  --accent-focus: #64b5f6;
+  --error-text: #ff8a80;
+  --error-bg: rgba(255, 138, 128, 0.1);
+  --hover-bg: #2a2a2a;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  background-color: var(--bg);
+  color: var(--text-primary);
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  display: flex;
+  justify-content: center;
+  padding: 32px 16px;
+}
+
+.container {
+  width: 100%;
+  max-width: 480px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+header {
+  text-align: center;
+  margin-bottom: 8px;
+}
+
+header h1 {
+  margin: 0;
+  font-size: 1.8rem;
+}
+
+header p {
+  margin: 4px 0 0;
+  color: var(--text-secondary);
+  font-size: 0.95rem;
+}
+
+.card {
+  background-color: var(--card-bg);
+  border-radius: 12px;
+  padding: 20px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+}
+
+.card h2 {
+  margin: 0 0 12px;
+  font-size: 1.1rem;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin-bottom: 12px;
+}
+
+.field label {
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+}
+
+.field input {
+  background-color: var(--input-bg);
+  border: 1px solid var(--input-border);
+  border-radius: 6px;
+  padding: 8px 10px;
+  color: var(--text-primary);
+  font-size: 0.95rem;
+  width: 100%;
+}
+
+.field input:focus {
+  outline: none;
+  border-color: var(--accent-focus);
+}
+
+button {
+  border: none;
+  border-radius: 6px;
+  padding: 10px 16px;
+  font-size: 0.95rem;
+  cursor: pointer;
+  color: #121212;
+  font-weight: 600;
+  transition: background-color 0.15s ease;
+}
+
+button:disabled {
+  opacity: 0.6;
+  cursor: default;
+}
+
+button.primary {
+  background-color: var(--accent-green);
+  width: 100%;
+}
+button.primary:hover:not(:disabled) {
+  background-color: var(--accent-green-hover);
+}
+
+button.danger {
+  background-color: var(--accent-red);
+  width: 100%;
+}
+button.danger:hover:not(:disabled) {
+  background-color: var(--accent-red-hover);
+}
+
+button.neutral {
+  background-color: var(--accent-neutral);
+  color: var(--text-primary);
+}
+button.neutral:hover:not(:disabled) {
+  background-color: var(--accent-neutral-hover);
+}
+
+.status-banner {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  margin-bottom: 16px;
+}
+
+.status-banner .name strong {
+  color: var(--accent-green);
+}
+
+.metadata {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px 16px;
+  margin-bottom: 16px;
+}
+
+.metadata-item {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--border);
+}
+
+.metadata-item .label {
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+}
+
+.metadata-item .value {
+  font-size: 1rem;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.9rem;
+  margin-bottom: 16px;
+}
+
+table th,
+table td {
+  text-align: left;
+  padding: 6px 8px;
+  border-bottom: 1px solid var(--border);
+}
+
+table th {
+  color: var(--text-secondary);
+  font-weight: 500;
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+table tbody tr:hover {
+  background-color: var(--hover-bg);
+}
+
+.error-message {
+  color: var(--error-text);
+  background-color: var(--error-bg);
+  border-radius: 6px;
+  padding: 8px 10px;
+  font-size: 0.85rem;
+  margin-top: 12px;
+}
+
+.list-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.list-header h2 {
+  margin: 0;
+}
+
+ul.test-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+ul.test-list li {
+  padding: 10px 4px;
+  border-bottom: 1px solid var(--border);
+  font-size: 0.95rem;
+}
+
+ul.test-list li:last-child {
+  border-bottom: none;
+}
+
+ul.test-list li:hover {
+  background-color: var(--hover-bg);
+}
+
+.empty-message {
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+  text-align: center;
+  padding: 12px 0;
+}

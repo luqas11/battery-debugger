@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="styles.css" />
+    <title>Battery Debugger</title>
+  </head>
+
+  <body>
+    <div class="container">
+      <header>
+        <h1>Battery Debugger</h1>
+        <p>Control de tests de descarga</p>
+      </header>
+
+      <div id="panel" class="card"></div>
+
+      <div class="card">
+        <div class="list-header">
+          <h2>Tests registrados</h2>
+          <button id="refreshListButton" class="neutral">Actualizar lista</button>
+        </div>
+        <div id="testList"></div>
+      </div>
+    </div>
+
+    <script src="scripts.js"></script>
+  </body>
+</html>
