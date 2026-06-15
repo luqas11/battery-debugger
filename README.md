@@ -1,30 +1,66 @@
 # battery-debugger
 
-### Objective
-Have a way to track the health state of batteries, based on periodically measure the discharge curves under constant load conditions. Specifically, this project aims to know the degradation grade of a Lead Acid battery which is working along a solar panel installation. Taking the curves periodically (maybe annualy, or semi-annually), a simple comparisson between them will show the capacity loss. The load conditions to measure the curves should always be the same, to ensure comparability. Besides that specific objective, this project could also be useful to test batteries of other types and other appliances.
+A system for tracking the health of a lead-acid battery over time, by periodically measuring its discharge curve under a constant load. Comparing curves taken months apart reveals how much capacity the battery has lost.
 
-### Developed solution
-- During the test, an **ESP8266** based board takes periodic readings of the battery voltage through it's analog input, and sends the values to a backend.
-- A **NodeJS** backend takes those readings, and saves them in a **CSV** file.
-- When the test is complete, the **NodeJS** backend runs a **Python** script that plots the readings as a graph in a **PNG** image, using **matplotlib**.
-- Finally, a static webpage served with **http-server** allows the user to see the graphs. That webpage also has interactive menus to start and stops tests from there.
+## How it works
 
-Those projects are in the `backend`, `frontend` and `firmware` directories.  
-The graphs images are saved in the `records` directory.  
-The wiring diagram to connect the **ESP** to the battery is in the `circuit` directory
+A discharge test goes like this:
 
-### Usage
-The procedure to measure a discharge curve should be:
-1. Ensure that there is nothing charging the battery (in my specific case, that the solar pannel is disconnected)
-2. Connect a fixed load to the battery terminals
-3. Connect the **ESP** to the battery terminals
-4. Navigate to the webpage and start a new test (to tell the backend to start saving new readings)
-5. Wait until the battery is depleted
-6. Disconnect the load and the **ESP**
-7. Navigate to the webpage and stop the test (to tell the backend to stop saving readings and generate a **PNG**)
-8. Navigate to the webpage and see the graph
+1. Connect a fixed load and the ESP8266 board to the battery terminals.
+2. Open the backend web UI and start a new test, entering the date, the load current, and the battery's age in months.
+3. The ESP takes periodic voltage readings and sends them to the backend, which saves them to a CSV file.
+4. Once the battery is depleted, stop the test from the web UI.
+5. Push the new records to the repository — the dashboard on GitHub Pages updates automatically.
 
-### Example:
-Example of real battery test, viewed on the webpage.  
+## Parts of the project
 
-<img src="example.png" height="75%" width="75%">
+### `firmware/`
+
+An Arduino sketch for the **ESP8266** that periodically reads the battery voltage through the analog input and sends it to the backend. WiFi credentials and the backend URL are configured in `config.h`. See [`firmware/README.md`](firmware/README.md) for calibration details.
+
+### `circuit/`
+
+KiCad schematic for the circuit that connects the ESP8266 board to the battery terminals. A PDF export is available at [`circuit/circuit-schematic.pdf`](circuit/circuit-schematic.pdf).
+
+### `backend/`
+
+A **Go** backend (single static binary) that exposes an HTTP API to start and stop tests and receive voltage readings, and serves a web UI to control everything from a browser. It runs on the machine where records are stored. Supports Linux (32-bit and 64-bit) and Windows. See [`backend/README.md`](backend/README.md).
+
+### `frontend/`
+
+A **Go** tool that reads the `records/` folder and generates a static dashboard, published to **GitHub Pages**. The dashboard lets you compare discharge curves between tests and visualize battery capacity decay over time. See [`frontend/README.md`](frontend/README.md).
+
+### `records/`
+
+CSV and JSON files for every finished test. Each test produces a `<name>.csv` (time/voltage readings) and a `<name>.json` (date, current, and battery age). This folder is the single source of data for both the backend and the dashboard.
+
+## Running the backend
+
+Prebuilt binaries are in `backend/binaries/`. Run the one that matches your machine:
+
+```
+# Linux 32-bit
+./backend/binaries/backend-386
+
+# Linux 64-bit
+./backend/binaries/backend-amd64
+
+# Windows
+.\backend\binaries\backend.exe
+```
+
+On Linux, mark the binary as executable first if needed: `chmod +x backend/binaries/backend-386`.
+
+Once running, open `http://<host>:8000/` in a browser to access the web UI.
+
+## Viewing the dashboard
+
+The dashboard is published automatically to GitHub Pages on every push to `main` that modifies `records/` or `frontend/`. To view it locally, run:
+
+```
+./frontend/binaries/frontend.exe        # Windows
+./frontend/binaries/frontend-amd64     # Linux 64-bit
+./frontend/binaries/frontend-386       # Linux 32-bit
+```
+
+Then open `http://localhost:8001/`.
