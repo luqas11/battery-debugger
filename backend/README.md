@@ -97,6 +97,11 @@ Any of these binaries can be copied to and run on the corresponding target machi
 
 ### Running:
 
+On Linux, the binary needs execute permissions, which may be lost when copying it from another OS:
+```
+chmod +x binaries/backend-386
+```
+
 To run a binary, either from `backend/`:
 ```
 ./binaries/backend-386
