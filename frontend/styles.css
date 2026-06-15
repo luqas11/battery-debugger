@@ -1,94 +1,197 @@
-h1 {
-  margin-bottom: 0px;
+:root {
+  --bg: #121212;
+  --card-bg: #222222;
+  --text-primary: #e0e0e0;
+  --text-secondary: #9a9a9a;
+  --border: #333333;
+  --input-bg: #2c2c2c;
+  --input-border: #444444;
+  --accent-green: #4caf50;
+  --accent-green-hover: #66bb6a;
+  --accent-red: #e57373;
+  --accent-focus: #64b5f6;
+  --hover-bg: #2a2a2a;
 }
 
-select,
-input {
-  width: 80%;
-  height: 25px;
-}
-
-#errorMessage,
-#statusErrorMessage {
-  color: #ee3333;
-  display: none;
-  font-family: "Roboto", sans-serif;
-  font-weight: 400;
-  font-size: medium;
-  max-width: 400px;
-}
-
-button {
-  width: 120px;
-  height: 40px;
-  background-color: #252570;
-  border-radius: 10px;
-  color: #e6e6e6;
-  font-family: "Roboto", sans-serif;
-  font-weight: 400;
-  font-size: medium;
-}
-
-span {
-  color: #e6e6e6;
-  text-align: center;
-  font-family: "Roboto", sans-serif;
-  font-weight: 200;
-}
-
-#selectorContainer,
-#startContainer,
-#stopContainer {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  align-items: center;
-  background-color: #1d1d40;
-  padding: 20px;
-  border-radius: 10px;
-  width: 250px;
-}
-
-#startContainer,
-#stopContainer {
-  display: none;
-}
-
-#title {
-  color: #e6e6e6;
-  text-align: center;
-  font-family: "Roboto", sans-serif;
-  font-weight: 300;
-}
-
-#container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 20px;
-}
-
-#plotContainer {
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-  max-width: 800px;
-  align-items: center;
-}
-
-img {
-  width: 90%;
+* {
+  box-sizing: border-box;
 }
 
 body {
   margin: 0;
-  background-color: #0a0a26;
+  min-height: 100vh;
+  background-color: var(--bg);
+  color: var(--text-primary);
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
   display: flex;
   justify-content: center;
+  padding: 32px 16px;
 }
 
-html,
-body,
-#root {
-  height: 100%;
+.container {
+  width: 100%;
+  max-width: 1000px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+header {
+  text-align: center;
+  margin-bottom: 8px;
+}
+
+header h1 {
+  margin: 0;
+  font-size: 1.8rem;
+}
+
+header p {
+  margin: 4px 0 0;
+  color: var(--text-secondary);
+  font-size: 0.95rem;
+}
+
+.card {
+  background-color: var(--card-bg);
+  border-radius: 12px;
+  padding: 20px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+}
+
+.card h2 {
+  margin: 0 0 12px;
+  font-size: 1.1rem;
+}
+
+.card h2 .hint {
+  font-size: 0.8rem;
+  font-weight: 400;
+  color: var(--text-secondary);
+}
+
+.layout {
+  display: grid;
+  grid-template-columns: 320px 1fr;
+  gap: 16px;
+}
+
+@media (max-width: 800px) {
+  .layout {
+    grid-template-columns: 1fr;
+  }
+}
+
+ul.test-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  max-height: 320px;
+  overflow-y: auto;
+}
+
+ul.test-list li {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 4px;
+  border-bottom: 1px solid var(--border);
+  font-size: 0.9rem;
+  cursor: pointer;
+}
+
+ul.test-list li:last-child {
+  border-bottom: none;
+}
+
+ul.test-list li:hover {
+  background-color: var(--hover-bg);
+}
+
+ul.test-list li input[type="checkbox"] {
+  accent-color: var(--accent-green);
+  width: 16px;
+  height: 16px;
+  flex-shrink: 0;
+}
+
+ul.test-list li .swatch {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+ul.test-list li .name {
+  flex: 1;
+}
+
+ul.test-list li .current,
+ul.test-list li .date {
+  color: var(--text-secondary);
+  font-size: 0.8rem;
+  white-space: nowrap;
+}
+
+.chart-wrap {
+  position: relative;
+  height: 360px;
+}
+
+.empty-message {
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+  text-align: center;
+  padding: 40px 0;
+}
+
+.metadata-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.tag {
+  background-color: var(--input-bg);
+  border: 1px solid var(--input-border);
+  border-radius: 999px;
+  padding: 4px 12px;
+  font-size: 0.8rem;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.tag .swatch {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+}
+
+.tabs {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.tabs button {
+  background-color: var(--input-bg);
+  border: 1px solid var(--input-border);
+  border-radius: 999px;
+  padding: 6px 16px;
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.tabs button:hover {
+  background-color: var(--hover-bg);
+}
+
+.tabs button.active {
+  background-color: var(--accent-green);
+  border-color: var(--accent-green);
+  color: #121212;
 }

@@ -1,43 +1,48 @@
 <!DOCTYPE html>
 <html lang="es">
-  <head>
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400&display=swap"
-      rel="stylesheet"
-    />
-    <link rel="stylesheet" type="text/css" href="styles.css" />
-    <script src="env.js"></script>
-    <script src="scripts.js"></script>
-    <title>Battery debugger</title>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-  </head>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Battery Debugger — Dashboard</title>
+<link rel="stylesheet" href="styles.css">
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4"></script>
+</head>
+<body>
+<div class="container">
+  <header>
+    <h1>Battery Debugger</h1>
+    <p>Dashboard de curvas de descarga</p>
+  </header>
 
-  <body>
-    <div id="container">
-      <h1 id="title">Battery debugger</h1>
-      <div id="startContainer">
-        <span
-          >No test is currently in progress. To start a new one, write a
-          name:</span
-        >
-        <input type="text" id="testNameInput" />
-        <button id="startButton" onclick="startTest()">Start test</button>
-      </div>
-      <div id="stopContainer">
-        <span id="stopText"></span>
-        <button id="stopButton" onclick="stopTest()">Stop test</button>
-      </div>
-      <div id="selectorContainer">
-        <span>Select a test to see it's graph:</span>
-        <select id="testSelector" name="select"></select>
-        <button id="getButton" onclick="getGraph()">Get graph</button>
-      </div>
-      <span id="errorMessage"></span>
-      <span id="statusErrorMessage"></span>
-      <div id="plotContainer"></div>
+  <div class="layout">
+    <div class="card">
+      <h2>Tests</h2>
+      <ul class="test-list" id="testList"></ul>
+      <p class="empty-message" id="emptyMessage" style="display:none">No hay tests registrados todavía.</p>
     </div>
-  </body>
+
+    <div class="card">
+      <h2>Comparación de curvas <span class="hint">tensión vs. tiempo</span></h2>
+      <div class="chart-wrap">
+        <canvas id="compareChart"></canvas>
+      </div>
+      <div class="metadata-row" id="compareTags"></div>
+    </div>
+  </div>
+
+  <div class="card" id="capacityCard">
+    <h2>Decaimiento de capacidad <span class="hint">capacidad estimada vs. edad de la batería</span></h2>
+    <div class="tabs" id="capacityTabs"></div>
+    <div class="tabs" id="capacityUnitTabs">
+      <button class="active" data-unit="ah">Ah</button>
+      <button data-unit="pct">%</button>
+    </div>
+    <div class="chart-wrap">
+      <canvas id="capacityChart"></canvas>
+    </div>
+  </div>
+</div>
+
+<script src="scripts.js"></script>
+</body>
 </html>
