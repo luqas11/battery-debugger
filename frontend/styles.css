@@ -74,6 +74,19 @@ header p {
   display: grid;
   grid-template-columns: 320px 1fr;
   gap: 16px;
+  align-items: start;
+}
+
+.layout .card:first-child {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.layout .card:first-child ul.test-list {
+  flex: 1;
+  overflow-y: auto;
+  min-height: 0;
 }
 
 @media (max-width: 800px) {
@@ -86,8 +99,6 @@ ul.test-list {
   list-style: none;
   margin: 0;
   padding: 0;
-  max-height: 320px;
-  overflow-y: auto;
 }
 
 ul.test-list li {
@@ -124,6 +135,10 @@ ul.test-list li .swatch {
 
 ul.test-list li .name {
   flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 ul.test-list li .current,

@@ -60,14 +60,24 @@ function renderTestList() {
   const list = document.getElementById('testList');
   list.innerHTML = '';
 
+  const recentNames = new Set(
+    [...tests].sort((a, b) => b.date.localeCompare(a.date)).slice(0, 2).map(t => t.name)
+  );
+
   tests.forEach(test => {
     const li = document.createElement('li');
 
     const checkbox = document.createElement('input');
     checkbox.type = 'checkbox';
-    checkbox.checked = true;
+    checkbox.checked = recentNames.has(test.name);
     checkbox.addEventListener('change', renderCompareChart);
     test.checkbox = checkbox;
+
+    li.addEventListener('click', e => {
+      if (e.target === checkbox) return;
+      checkbox.checked = !checkbox.checked;
+      renderCompareChart();
+    });
 
     const swatch = document.createElement('span');
     swatch.className = 'swatch';
@@ -94,6 +104,16 @@ function initCompareChart() {
   compareChart = new Chart(document.getElementById('compareChart'), {
     type: 'line',
     data: { datasets: [] },
+    plugins: [{
+      id: 'legendMargin',
+      beforeInit(chart) {
+        const originalFit = chart.legend.fit;
+        chart.legend.fit = function() {
+          originalFit.call(this);
+          this.height += 12;
+        };
+      }
+    }],
     options: {
       responsive: true,
       maintainAspectRatio: false,
@@ -112,10 +132,29 @@ function initCompareChart() {
         }
       },
       plugins: {
-        legend: { labels: { color: '#e0e0e0' } }
+        legend: { labels: { color: '#e0e0e0' } },
+        tooltip: { enabled: window.innerWidth > 800 }
       }
     }
   });
+
+  window.addEventListener('resize', () => {
+    compareChart.options.plugins.tooltip.enabled = window.innerWidth > 800;
+    compareChart.update('none');
+  });
+}
+
+function syncTestCardHeight() {
+  const testCard = document.querySelector('.layout .card:first-child');
+  const compareCard = document.querySelector('.layout .card:last-child');
+  if (window.innerWidth <= 800) {
+    testCard.style.maxHeight = '';
+    testCard.style.minHeight = '';
+  } else {
+    const h = compareCard.offsetHeight + 'px';
+    testCard.style.maxHeight = h;
+    testCard.style.minHeight = h;
+  }
 }
 
 function renderCompareChart() {
@@ -145,6 +184,8 @@ function renderCompareChart() {
     tag.append(`${test.name} — ${test.date} — ${test.current}A / ${test.age} meses`);
     tags.appendChild(tag);
   });
+
+  syncTestCardHeight();
 }
 
 function initCapacityChart() {
@@ -261,11 +302,13 @@ function renderCapacityChart() {
 
 async function init() {
   const manifest = await fetchJSON('data/manifest.json');
-  tests = manifest.tests.map((test, i) => ({
-    ...test,
-    color: PALETTE[i % PALETTE.length],
-    readings: null
-  }));
+  tests = manifest.tests
+    .sort((a, b) => b.date.localeCompare(a.date))
+    .map((test, i) => ({
+      ...test,
+      color: PALETTE[i % PALETTE.length],
+      readings: null
+    }));
 
   if (tests.length === 0) {
     document.getElementById('emptyMessage').style.display = 'block';
@@ -286,5 +329,7 @@ async function init() {
   setupCapacityUnitTabs();
   renderCapacityChart();
 }
+
+window.addEventListener('resize', syncTestCardHeight);
 
 init();
