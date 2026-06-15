@@ -32,13 +32,17 @@ type Manifest struct {
 
 // resolveDirs locates the records/ directory and the frontend/ directory
 // (the one containing index.html), relative to the current working
-// directory. This allows the binary to run either from frontend/ (dev,
-// `go run .`) or from frontend/binaries/ (prebuilt binaries).
+// directory. This allows the binary to run from frontend/ (dev,
+// `go run .`), from frontend/binaries/ (prebuilt binaries), or from the
+// project root (e.g. `./frontend/binaries/frontend-amd64`, as done in CI).
 func resolveDirs() (recordsDir, frontendDir string) {
 	if _, err := os.Stat("index.html"); err == nil {
 		return "../records", "."
 	}
-	return "../../records", ".."
+	if _, err := os.Stat("../index.html"); err == nil {
+		return "../../records", ".."
+	}
+	return "records", "frontend"
 }
 
 // generateData copies finished tests from recordsDir into
