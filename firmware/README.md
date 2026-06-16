@@ -4,24 +4,35 @@ An Arduino sketch for the **ESP8266** that periodically reads the battery voltag
 
 ## Setup
 
-### 1. Flash the sketch
+### 1. Configure the setup access point
 
-Open `firmware-new.ino` in the Arduino IDE, select your ESP8266 board, and upload.
+Copy `config.example.h` to `config.h` and set the SSID and password for the access point the ESP exposes when configuring WiFi:
 
-### 2. Configure via the setup portal
+```cpp
+#define AP_SSID     "SSID"
+#define AP_PASSWORD "PASSWORD"
+```
 
-On first boot, the ESP starts a WiFi network called `ESP8266-Setup`. Connect to it and open `http://192.168.4.1` in a browser.
+The password must be at least 8 characters (WPA2 requirement). `config.h` is gitignored and never committed.
+
+### 2. Flash the sketch
+
+Open `firmware.ino` in the Arduino IDE, select your ESP8266 board, and upload.
+
+### 3. Configure via the setup portal
+
+On first boot, the ESP starts a WiFi network using the SSID and password from `config.h`. Connect to it and open `http://192.168.4.1` in a browser.
 
 The page has two independent configuration sections:
 
-- **Configurar WiFi** — enter your network's SSID and password and press **Guardar**. The ESP saves the credentials and connects. Leaving the password field blank keeps the previously saved password.
-- **Configurar backend** — enter the host and port of the machine running the backend (e.g. `192.168.1.42:8080`) and press **Guardar**.
+- **Configurar WiFi** — enter your network's SSID and password and press **Guardar**. The ESP saves the credentials and connects. Leaving the password field blank when re-saving the same network keeps the previously saved password.
+- **Configurar backend** — enter the host and port of the machine running the backend (e.g. `192.168.1.42:8000`) and press **Guardar**.
 
 The setup portal stays available at `http://192.168.4.1` after a successful connection, so you can check the connection status, see the ESP's IP on the local network, or update any setting without reflashing.
 
 ## Voltage calibration
 
-The voltage is converted from the ADC reading using two calibration constants defined directly in `firmware-new.ino`:
+The voltage is converted from the ADC reading using two calibration constants defined directly in `firmware.ino`:
 
 ```cpp
 const float REF_VOLTAGE = 11.46;  // known input voltage in Volts

@@ -2,10 +2,10 @@ package main
 
 import (
 	"encoding/json"
-	"fmt"
 	"net/http"
 	"os"
 	"regexp"
+	"strconv"
 	"strings"
 	"time"
 )
@@ -103,7 +103,7 @@ func handleSaveReading(w http.ResponseWriter, r *http.Request) {
 	}
 	defer file.Close()
 
-	content := fmt.Sprintf("%v,%v\n", *body.Time, *body.Voltage)
+	content := strconv.FormatFloat(*body.Time, 'f', -1, 64) + "," + strconv.FormatFloat(*body.Voltage, 'f', -1, 64) + "\n"
 	if _, err := file.WriteString(content); err != nil {
 		writeError(w, http.StatusInternalServerError, "An unexpected error has occurred. The reading was not saved.")
 		return

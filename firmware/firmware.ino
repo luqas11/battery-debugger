@@ -3,6 +3,7 @@
 #include <ESP8266WebServer.h>
 #include <LittleFS.h>
 #include <ArduinoJson.h>
+#include "config.h"
 
 const float REF_VOLTAGE = 11.46;
 const int   REF_ADC     = 566;
@@ -10,7 +11,6 @@ const int   REF_ADC     = 566;
 const unsigned long READING_INTERVAL_MS = 120000UL;
 const int           LED_PIN             = LED_BUILTIN;
 const int           WIFI_TIMEOUT_MS     = 10000;
-const char*         AP_SSID             = "ESP8266-Setup";
 const char*         CONFIG_PATH         = "/config.json";
 
 ESP8266WebServer server(80);
@@ -43,7 +43,7 @@ bool loadConfig() {
   File f = LittleFS.open(CONFIG_PATH, "r");
   if (!f) return false;
 
-  StaticJsonDocument<384> doc;
+  JsonDocument doc;
   if (deserializeJson(doc, f)) { f.close(); return false; }
   f.close();
 
@@ -57,7 +57,7 @@ bool saveConfig(const String& ssid, const String& password, const String& server
   File f = LittleFS.open(CONFIG_PATH, "w");
   if (!f) return false;
 
-  StaticJsonDocument<384> doc;
+  JsonDocument doc;
   doc["ssid"]       = ssid;
   doc["password"]   = password;
   doc["serverHost"] = serverHost;
@@ -178,7 +178,7 @@ void handleRoot() {
   String backendForm = "<div class=\"card\"><h2>Configurar backend</h2>"
                       "<form method=\"POST\" action=\"/save-backend\">"
                       "<label>Backend URL</label>"
-                      "<input name=\"serverHost\" type=\"text\" placeholder=\"192.168.1.X:8080\" value=\"" + savedServerHost + "\">"
+                      "<input name=\"serverHost\" type=\"text\" placeholder=\"192.168.1.X:8000\" value=\"" + savedServerHost + "\">"
                       "<button type=\"submit\">Guardar</button>"
                       "</form></div>";
 
@@ -215,8 +215,9 @@ void handleSaveWiFi() {
     return;
   }
 
-  // Keep existing password if the field was left blank.
-  if (password.length() == 0) password = savedPassword;
+  // If the password is left blank for the same network, keep the saved one.
+  // A blank password for a different network is treated as an open network.
+  if (password.length() == 0 && ssid == savedSSID) password = savedPassword;
 
   if (!saveConfig(ssid, password, savedServerHost)) {
     server.send(500, "text/html", errorPage("Error al guardar la configuración."));
@@ -291,13 +292,17 @@ void setup() {
   ledOff();
 
   if (!LittleFS.begin()) {
-    Serial.println("LittleFS mount failed");
-    blinkError();
+    Serial.println("LittleFS mount failed, formatting...");
+    LittleFS.format();
+    if (!LittleFS.begin()) {
+      Serial.println("LittleFS mount failed after format");
+      blinkError();
+    }
   }
 
   // Always run as AP+STA so the portal is available regardless of WiFi status.
   WiFi.mode(WIFI_AP_STA);
-  WiFi.softAP(AP_SSID);
+  WiFi.softAP(AP_SSID, AP_PASSWORD);
   Serial.println("AP started: " + String(AP_SSID));
 
   startServer();

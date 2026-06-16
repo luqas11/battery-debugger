@@ -12,7 +12,7 @@ Returns the name of the test that is currently in progress. If a test is in prog
 ```json
 {
     "currentTestName": "Example",
-    "metadata": { "date": "2026-06-14", "current": 0.25, "age": 12 },
+    "metadata": { "date": "2026-06-14", "current": 0.25, "age": 12, "outlier": false },
     "lastReadings": [
         { "time": 1.50, "voltage": 12.10 },
         { "time": 1.53, "voltage": 12.05 }
