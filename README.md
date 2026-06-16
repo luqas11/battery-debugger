@@ -14,9 +14,9 @@ A discharge test goes like this:
 
 ## Parts of the project
 
-### `firmware/`
+### `firmware-new/`
 
-An Arduino sketch for the **ESP8266** that periodically reads the battery voltage through the analog input and sends it to the backend. WiFi credentials and the backend URL are configured in `config.h`. See [`firmware/README.md`](firmware/README.md) for calibration details.
+An Arduino sketch for the **ESP8266** that periodically reads the battery voltage through the analog input and sends it to the backend. WiFi credentials and the backend URL are configured at runtime via a built-in setup portal — no hardcoded credentials. See [`firmware-new/README.md`](firmware-new/README.md) for setup and calibration details.
 
 ### `circuit/`
 
