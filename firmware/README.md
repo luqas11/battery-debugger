@@ -10,12 +10,12 @@ Open `firmware-new.ino` in the Arduino IDE, select your ESP8266 board, and uploa
 
 ### 2. Configure via the setup portal
 
-On first boot, the ESP starts a WiFi network called `ESP8266-Setup`. Connect to it and open `http://192.168.4.1` in a browser. Fill in:
+On first boot, the ESP starts a WiFi network called `ESP8266-Setup`. Connect to it and open `http://192.168.4.1` in a browser.
 
-- **SSID** and **Password** — your local WiFi network
-- **Backend URL** — host and port of the machine running the backend (e.g. `192.168.1.42:8080`)
+The page has two independent configuration sections:
 
-Press **Guardar**. The ESP saves the configuration to flash and connects to the network.
+- **Configurar WiFi** — enter your network's SSID and password and press **Guardar**. The ESP saves the credentials and connects. Leaving the password field blank keeps the previously saved password.
+- **Configurar backend** — enter the host and port of the machine running the backend (e.g. `192.168.1.42:8080`) and press **Guardar**.
 
 The setup portal stays available at `http://192.168.4.1` after a successful connection, so you can check the connection status, see the ESP's IP on the local network, or update any setting without reflashing.
 
@@ -47,4 +47,4 @@ To recalibrate, apply a known voltage to the input (close to the voltages you ex
 - **ArduinoJson 7.4.3** (Benoit Blanchon) — available in the Arduino Library Manager
 - **ESP8266 Arduino Core 3.1.2** (ESP8266 Community) — available in the Arduino Boards Manager
 
-If the code fails to compile after reinstalling dependencies, make sure the ArduinoJson version matches the one listed above.
+If the code fails to compile after reinstalling dependencies, make sure the versions listed above are used.
