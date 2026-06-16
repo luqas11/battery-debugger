@@ -1,12 +1,50 @@
 # Firmware
-This **ESP8266** sketch takes the readings from the battery and sends them to the **Node** backend. The WiFi credentials and the backend URL are stored in the `config.h` file, and the reading period is defined (in minutes) in the sketch, as the integer variable `PERIOD`. It will indefinetly try to send the current voltage value to the backend, wait the `PERIOD` time, and try again. The built-in led will blink once if the request sent is successful, and blink twice if it's not.  
 
-The time is read from the `millis()` function and converted to hours, and the voltage is read from the analog input, and converted with a correction constant. Since the relation between the read voltage and the analog value is linear, the conversion is quite simple:  
+An Arduino sketch for the **ESP8266** that periodically reads the battery voltage through the analog input and sends it to the backend every 2 minutes.
 
-`Voltage = Analog reading * k`  
+## Setup
 
-Defining the constant `k` as:  
+### 1. Flash the sketch
 
-`k = Reference voltage / Reference analog value`  
+Open `firmware-new.ino` in the Arduino IDE, select your ESP8266 board, and upload.
 
-Where the reference values could be taken applying a reference external voltage. Those values can be taken giving a known extenal voltage to the input, and printing the analog value that corresponds to that specific voltage. With that, `k` can be defined and the conversion can be done. Following that procedure the device can be calibrated. To get a better calibration, use a reference voltage similar to the ones that are going to be measured.
+### 2. Configure via the setup portal
+
+On first boot, the ESP starts a WiFi network called `ESP8266-Setup`. Connect to it and open `http://192.168.4.1` in a browser. Fill in:
+
+- **SSID** and **Password** — your local WiFi network
+- **Backend URL** — host and port of the machine running the backend (e.g. `192.168.1.42:8080`)
+
+Press **Guardar**. The ESP saves the configuration to flash and connects to the network.
+
+The setup portal stays available at `http://192.168.4.1` after a successful connection, so you can check the connection status, see the ESP's IP on the local network, or update any setting without reflashing.
+
+## Voltage calibration
+
+The voltage is converted from the ADC reading using two calibration constants defined directly in `firmware-new.ino`:
+
+```cpp
+const float REF_VOLTAGE = 11.46;  // known input voltage in Volts
+const int   REF_ADC     = 566;    // ADC reading at that voltage
+```
+
+The conversion is: `voltage = analogRead(A0) * (REF_VOLTAGE / REF_ADC)`
+
+To recalibrate, apply a known voltage to the input (close to the voltages you expect to measure for best accuracy), read the raw ADC value from the Serial monitor, and update both constants.
+
+## LED patterns
+
+| Pattern | Meaning |
+|---|---|
+| Blinking every 500 ms | Connecting to WiFi |
+| Blinking every 1500 ms | AP mode active, waiting for credentials |
+| 1 long blink | WiFi connected successfully |
+| 3 short blinks | Reading sent successfully |
+| 2 long blinks | Error sending reading |
+
+## Dependencies
+
+- **ArduinoJson 7.4.3** (Benoit Blanchon) — available in the Arduino Library Manager
+- **ESP8266 Arduino Core 3.1.2** (ESP8266 Community) — available in the Arduino Boards Manager
+
+If the code fails to compile after reinstalling dependencies, make sure the ArduinoJson version matches the one listed above.
