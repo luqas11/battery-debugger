@@ -1,5 +1,6 @@
 {
     "date": "2026-05-02",
-    "current": 0.2,
-    "age": 31
+    "current": 0.20,
+    "age": 31,
+    "outlier": false
 }

@@ -1,5 +1,6 @@
 {
     "date": "2024-04-20",
     "current": 0.33,
-    "age": 6
+    "age": 6,
+    "outlier": false
 }

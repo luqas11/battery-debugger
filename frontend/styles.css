@@ -148,6 +148,16 @@ ul.test-list li .date {
   white-space: nowrap;
 }
 
+ul.test-list li.outlier {
+  background-color: rgba(229, 115, 115, 0.07);
+}
+
+ul.test-list li.outlier .name,
+ul.test-list li.outlier .current,
+ul.test-list li.outlier .date {
+  color: #b97070;
+}
+
 .chart-wrap {
   position: relative;
   height: 360px;

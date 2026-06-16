@@ -168,7 +168,7 @@ func handleStartTest(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	metadata := TestMetadata{Date: body.Date, Current: *body.Current, Age: *body.Age}
+	metadata := TestMetadata{Date: body.Date, Current: *body.Current, Age: *body.Age, Outlier: false}
 	metadataBytes, err := json.Marshal(metadata)
 	if err != nil {
 		writeError(w, http.StatusInternalServerError, "An unexpected error has occurred. The test has not started.")

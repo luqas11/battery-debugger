@@ -15,6 +15,7 @@ type TestMetadata struct {
 	Date    string  `json:"date"`
 	Current float64 `json:"current"`
 	Age     float64 `json:"age"`
+	Outlier bool    `json:"outlier"`
 }
 
 // ManifestEntry describes a finished test in frontend/data/manifest.json.
@@ -23,6 +24,7 @@ type ManifestEntry struct {
 	Date    string  `json:"date"`
 	Current float64 `json:"current"`
 	Age     float64 `json:"age"`
+	Outlier bool    `json:"outlier"`
 }
 
 // Manifest is the content of frontend/data/manifest.json.
@@ -99,6 +101,7 @@ func generateData(recordsDir, frontendDir string) error {
 			Date:    metadata.Date,
 			Current: metadata.Current,
 			Age:     metadata.Age,
+			Outlier: metadata.Outlier,
 		})
 	}
 

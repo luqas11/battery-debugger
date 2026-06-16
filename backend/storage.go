@@ -34,6 +34,7 @@ type TestMetadata struct {
 	Date    string  `json:"date"`
 	Current float64 `json:"current"`
 	Age     float64 `json:"age"`
+	Outlier bool    `json:"outlier"`
 }
 
 // Reading is a single Time/Voltage pair read from a test's CSV file.

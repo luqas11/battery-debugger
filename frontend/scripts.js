@@ -79,9 +79,11 @@ function renderTestList() {
       renderCompareChart();
     });
 
+    if (test.outlier) li.classList.add('outlier');
+
     const swatch = document.createElement('span');
     swatch.className = 'swatch';
-    swatch.style.backgroundColor = test.color;
+    swatch.style.backgroundColor = test.outlier ? '#555555' : test.color;
 
     const name = document.createElement('span');
     name.className = 'name';
@@ -249,7 +251,7 @@ function setupCapacityUnitTabs() {
 
 function renderCapacityChart() {
   const points = tests
-    .filter(t => currentGroup(t.current) === capacityGroup)
+    .filter(t => currentGroup(t.current) === capacityGroup && !t.outlier)
     .map(t => ({age: t.age, capacity: capacityOf(t)}))
     .sort((a, b) => a.age - b.age);
 
