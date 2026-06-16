@@ -91,7 +91,7 @@ function renderTestList() {
 
     const current = document.createElement('span');
     current.className = 'current';
-    current.textContent = `${test.current} A`;
+    current.textContent = `${test.current.toFixed(2)} A`;
 
     const date = document.createElement('span');
     date.className = 'date';
@@ -183,7 +183,7 @@ function renderCompareChart() {
     swatch.style.backgroundColor = test.color;
 
     tag.appendChild(swatch);
-    tag.append(`${test.name} — ${test.date} — ${test.current}A / ${test.age} meses`);
+    tag.append(`${test.name} — ${test.date} — ${test.current.toFixed(2)}A / ${test.age} meses`);
     tags.appendChild(tag);
   });
 
@@ -226,7 +226,7 @@ function setupCapacityTabs() {
 
   groups.forEach((group, i) => {
     const btn = document.createElement('button');
-    btn.textContent = `~${group} A`;
+    btn.textContent = `~${group.toFixed(2)} A`;
     if (i === 0) btn.classList.add('active');
     btn.addEventListener('click', () => {
       container.querySelectorAll('button').forEach(b => b.classList.remove('active'));
@@ -269,8 +269,8 @@ function renderCapacityChart() {
   capacityChart.data.datasets = [
     {
       label: capacityUnit === 'pct'
-        ? `Capacidad relativa (%) — ~${capacityGroup} A`
-        : `Capacidad estimada (Ah) — ~${capacityGroup} A`,
+        ? `Capacidad relativa (%) — ~${capacityGroup.toFixed(2)} A`
+        : `Capacidad estimada (Ah) — ~${capacityGroup.toFixed(2)} A`,
       borderColor: '#e57373',
       backgroundColor: '#e57373',
       pointRadius: 4,
