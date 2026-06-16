@@ -13,3 +13,52 @@ settings:
   timeout: 0
   followRedirects: true
   maxRedirects: 5
+
+examples:
+  - name: No test in progress
+    request:
+      url: "{{BASE_URL}}/get-current-test"
+      method: GET
+    response:
+      status: 200
+      statusText: OK
+      headers:
+        - name: content-type
+          value: application/json
+        - name: date
+          value: Tue, 16 Jun 2026 02:53:54 GMT
+        - name: content-length
+          value: "23"
+      body:
+        type: json
+        data: |-
+          {
+            "currentTestName": ""
+          }
+  - name: Test in progress
+    request:
+      url: "{{BASE_URL}}/get-current-test"
+      method: GET
+    response:
+      status: 200
+      statusText: OK
+      headers:
+        - name: content-type
+          value: application/json
+        - name: date
+          value: Tue, 16 Jun 2026 02:54:19 GMT
+        - name: content-length
+          value: "119"
+      body:
+        type: json
+        data: |-
+          {
+            "currentTestName": "Test1",
+            "lastReadings": [],
+            "metadata": {
+              "date": "2026-06-14",
+              "current": 0.25,
+              "age": 12,
+              "outlier": false
+            }
+          }

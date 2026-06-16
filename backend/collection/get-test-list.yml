@@ -13,3 +13,38 @@ settings:
   timeout: 0
   followRedirects: true
   maxRedirects: 5
+
+examples:
+  - name: Success
+    request:
+      url: "{{BASE_URL}}/get-test-list"
+      method: GET
+    response:
+      status: 200
+      statusText: OK
+      headers:
+        - name: content-type
+          value: application/json
+        - name: date
+          value: Tue, 16 Jun 2026 02:53:19 GMT
+        - name: content-length
+          value: "292"
+      body:
+        type: json
+        data: |-
+          {
+            "testNames": [
+              "2023_11_24_Discharge",
+              "2023_12_03_Discharge",
+              "2024_04_11_Discharge",
+              "2024_04_20_Discharge",
+              "2024_09_04_Discharge",
+              "2024_09_13_Discharge",
+              "2024_11_16_Discharge",
+              "2024_11_29_Discharge",
+              "2025_07_23_Discharge",
+              "2025_07_29_Discharge",
+              "2026_05_02_Discharge",
+              "2026_05_25_Discharge"
+            ]
+          }

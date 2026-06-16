@@ -13,3 +13,45 @@ settings:
   timeout: 0
   followRedirects: true
   maxRedirects: 5
+
+examples:
+  - name: Success
+    request:
+      url: "{{BASE_URL}}/end-test"
+      method: POST
+    response:
+      status: 200
+      statusText: OK
+      headers:
+        - name: content-type
+          value: application/json
+        - name: date
+          value: Tue, 16 Jun 2026 02:54:35 GMT
+        - name: content-length
+          value: "57"
+      body:
+        type: json
+        data: |-
+          {
+            "message": "Test with name \"Test1\" has been stopped."
+          }
+  - name: No test in progress
+    request:
+      url: "{{BASE_URL}}/end-test"
+      method: POST
+    response:
+      status: 400
+      statusText: Bad Request
+      headers:
+        - name: content-type
+          value: application/json
+        - name: date
+          value: Tue, 16 Jun 2026 02:54:45 GMT
+        - name: content-length
+          value: "48"
+      body:
+        type: json
+        data: |-
+          {
+            "message": "No test is currently in progress."
+          }

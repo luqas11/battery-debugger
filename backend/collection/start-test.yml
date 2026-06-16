@@ -10,7 +10,7 @@ http:
     type: json
     data: |-
       {
-        "name": "Test1",
+        "name": "Test2",
         "date": "2026-06-14",
         "current": 0.25,
         "age": 12
@@ -22,3 +22,92 @@ settings:
   timeout: 0
   followRedirects: true
   maxRedirects: 5
+
+examples:
+  - name: Success
+    request:
+      url: "{{BASE_URL}}/start-test"
+      method: POST
+      body:
+        type: json
+        data: |-
+          {
+            "name": "Test1",
+            "date": "2026-06-14",
+            "current": 0.25,
+            "age": 12
+          }
+    response:
+      status: 200
+      statusText: OK
+      headers:
+        - name: content-type
+          value: application/json
+        - name: date
+          value: Tue, 16 Jun 2026 02:54:10 GMT
+        - name: content-length
+          value: "52"
+      body:
+        type: json
+        data: |-
+          {
+            "message": "New test started with name \"Test1\"."
+          }
+  - name: Test name already used
+    request:
+      url: "{{BASE_URL}}/start-test"
+      method: POST
+      body:
+        type: json
+        data: |-
+          {
+            "name": "Test1",
+            "date": "2026-06-14",
+            "current": 0.25,
+            "age": 12
+          }
+    response:
+      status: 400
+      statusText: Bad Request
+      headers:
+        - name: content-type
+          value: application/json
+        - name: date
+          value: Tue, 16 Jun 2026 02:55:16 GMT
+        - name: content-length
+          value: "57"
+      body:
+        type: json
+        data: |-
+          {
+            "message": "A test with name \"Test1\" already exists."
+          }
+  - name: Test in progress
+    request:
+      url: "{{BASE_URL}}/start-test"
+      method: POST
+      body:
+        type: json
+        data: |-
+          {
+            "name": "Test2",
+            "date": "2026-06-14",
+            "current": 0.25,
+            "age": 12
+          }
+    response:
+      status: 400
+      statusText: Bad Request
+      headers:
+        - name: content-type
+          value: application/json
+        - name: date
+          value: Tue, 16 Jun 2026 02:55:32 GMT
+        - name: content-length
+          value: "82"
+      body:
+        type: json
+        data: |-
+          {
+            "message": "Test \"Test2\" is currently in progress. To stop it, use /end-test."
+          }

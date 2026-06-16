@@ -20,3 +20,59 @@ settings:
   timeout: 0
   followRedirects: true
   maxRedirects: 5
+
+examples:
+  - name: Success
+    request:
+      url: "{{BASE_URL}}/save-reading"
+      method: POST
+      body:
+        type: json
+        data: |-
+          {
+            "time": 0.5,
+            "voltage": 12.3
+          }
+    response:
+      status: 200
+      statusText: OK
+      headers:
+        - name: content-type
+          value: application/json
+        - name: date
+          value: Tue, 16 Jun 2026 02:54:28 GMT
+        - name: content-length
+          value: "51"
+      body:
+        type: json
+        data: |-
+          {
+            "message": "Reading saved to the test \"Test1\"."
+          }
+  - name: No test in progress
+    request:
+      url: "{{BASE_URL}}/save-reading"
+      method: POST
+      body:
+        type: json
+        data: |-
+          {
+            "time": 0.5,
+            "voltage": 12.3
+          }
+    response:
+      status: 400
+      statusText: Bad Request
+      headers:
+        - name: content-type
+          value: application/json
+        - name: date
+          value: Tue, 16 Jun 2026 02:54:55 GMT
+        - name: content-length
+          value: "79"
+      body:
+        type: json
+        data: |-
+          {
+            "message": "No test is currently in progress. To start one, use /start-test."
+          }
