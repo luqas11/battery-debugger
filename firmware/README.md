@@ -48,7 +48,6 @@ To recalibrate, apply a known voltage to the input (close to the voltages you ex
 | Pattern | Meaning |
 |---|---|
 | Blinking every 500 ms | Connecting to WiFi |
-| Blinking every 1500 ms | AP mode active, waiting for credentials |
 | 1 long blink | WiFi connected successfully |
 | 3 short blinks | Reading sent successfully |
 | 2 long blinks | Error sending reading |
