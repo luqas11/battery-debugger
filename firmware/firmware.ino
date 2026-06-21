@@ -8,16 +8,17 @@
 const float REF_VOLTAGE = 11.46;
 const int   REF_ADC     = 566;
 
-const unsigned long READING_INTERVAL_MS = 120000UL;
 const int           LED_PIN             = LED_BUILTIN;
 const int           WIFI_TIMEOUT_MS     = 10000;
 const char*         CONFIG_PATH         = "/config.json";
+const unsigned long DEFAULT_INTERVAL_MS = 120000UL;
 
 ESP8266WebServer server(80);
 
-String savedSSID;
-String savedPassword;
-String savedServerHost;
+String        savedSSID;
+String        savedPassword;
+String        savedServerHost;
+unsigned long readingIntervalMs = DEFAULT_INTERVAL_MS;
 
 // ── LED helpers ───────────────────────────────────────────────────────────────
 
@@ -47,9 +48,10 @@ bool loadConfig() {
   if (deserializeJson(doc, f)) { f.close(); return false; }
   f.close();
 
-  savedSSID       = doc["ssid"]        | "";
-  savedPassword   = doc["password"]    | "";
-  savedServerHost = doc["serverHost"]  | "";
+  savedSSID        = doc["ssid"]        | "";
+  savedPassword    = doc["password"]    | "";
+  savedServerHost  = doc["serverHost"]  | "";
+  readingIntervalMs = doc["intervalMs"] | DEFAULT_INTERVAL_MS;
   return savedSSID.length() > 0;
 }
 
@@ -58,9 +60,10 @@ bool saveConfig(const String& ssid, const String& password, const String& server
   if (!f) return false;
 
   JsonDocument doc;
-  doc["ssid"]       = ssid;
-  doc["password"]   = password;
-  doc["serverHost"] = serverHost;
+  doc["ssid"]        = ssid;
+  doc["password"]    = password;
+  doc["serverHost"]  = serverHost;
+  doc["intervalMs"]  = readingIntervalMs;
   serializeJson(doc, f);
   f.close();
   return true;
@@ -164,6 +167,8 @@ void handleRoot() {
                     ? savedServerHost
                     : String("<span class=\"not-set\">No configurado</span>"))
                 + "</span></div>";
+  statusCard += "<div class=\"row\"><span class=\"label\">Intervalo</span><span>"
+                + String(readingIntervalMs / 60000) + " min</span></div>";
   statusCard += "</div>";
 
   String wifiForm = "<div class=\"card\"><h2>Configurar WiFi</h2>"
@@ -179,6 +184,8 @@ void handleRoot() {
                       "<form method=\"POST\" action=\"/save-backend\">"
                       "<label>Backend URL</label>"
                       "<input name=\"serverHost\" type=\"text\" placeholder=\"192.168.1.X:8000\" value=\"" + savedServerHost + "\">"
+                      "<label>Intervalo de lectura (minutos)</label>"
+                      "<input name=\"intervalMin\" type=\"number\" min=\"1\" value=\"" + String(readingIntervalMs / 60000) + "\">"
                       "<button type=\"submit\">Guardar</button>"
                       "</form></div>";
 
@@ -244,7 +251,16 @@ void handleSaveWiFi() {
 }
 
 void handleSaveBackend() {
-  String serverHost = server.arg("serverHost");
+  String serverHost  = server.arg("serverHost");
+  String intervalStr = server.arg("intervalMin");
+
+  unsigned long newIntervalMs = readingIntervalMs;
+  if (intervalStr.length() > 0) {
+    int mins = intervalStr.toInt();
+    if (mins >= 1) newIntervalMs = (unsigned long)mins * 60000UL;
+  }
+
+  readingIntervalMs = newIntervalMs;
 
   if (!saveConfig(savedSSID, savedPassword, serverHost)) {
     server.send(500, "text/html", errorPage("Error al guardar la configuración."));
@@ -257,6 +273,7 @@ void handleSaveBackend() {
   server.send(303);
 
   Serial.println("Backend host updated: " + savedServerHost);
+  Serial.println("Reading interval updated: " + String(readingIntervalMs / 60000) + " min");
 }
 
 void startServer() {
@@ -320,13 +337,13 @@ void setup() {
   }
 }
 
-unsigned long lastSentAt = READING_INTERVAL_MS; // triggers immediately on first loop
+unsigned long lastSentAt = DEFAULT_INTERVAL_MS; // triggers immediately on first loop
 
 void loop() {
   server.handleClient();
 
   if (WiFi.status() == WL_CONNECTED && savedServerHost.length() > 0
-      && millis() - lastSentAt >= READING_INTERVAL_MS) {
+      && millis() - lastSentAt >= readingIntervalMs) {
     lastSentAt = millis();
 
     float inputValue   = analogRead(A0);
