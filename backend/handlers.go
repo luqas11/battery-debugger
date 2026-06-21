@@ -110,7 +110,7 @@ func handleSaveReading(w http.ResponseWriter, r *http.Request) {
 	}
 	defer file.Close()
 
-	content := strconv.FormatFloat(elapsed, 'f', -1, 64) + "," + strconv.FormatFloat(*body.Voltage, 'f', -1, 64) + "\n"
+	content := strconv.FormatFloat(elapsed, 'f', 2, 64) + "," + strconv.FormatFloat(*body.Voltage, 'f', 2, 64) + "\n"
 	if _, err := file.WriteString(content); err != nil {
 		writeError(w, http.StatusInternalServerError, "An unexpected error has occurred. The reading was not saved.")
 		return
