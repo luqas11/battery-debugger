@@ -10,7 +10,6 @@ http:
     type: json
     data: |-
       {
-        "time": 0.5,
         "voltage": 12.3
       }
   auth: inherit
@@ -30,7 +29,6 @@ examples:
         type: json
         data: |-
           {
-            "time": 0.5,
             "voltage": 12.3
           }
     response:
@@ -57,7 +55,6 @@ examples:
         type: json
         data: |-
           {
-            "time": 0.5,
             "voltage": 12.3
           }
     response:

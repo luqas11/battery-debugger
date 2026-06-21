@@ -269,7 +269,7 @@ void startServer() {
 
 // ── Reading ───────────────────────────────────────────────────────────────────
 
-bool sendReading(float currentTime, float voltage) {
+bool sendReading(float voltage) {
   WiFiClient client;
   HTTPClient http;
 
@@ -277,7 +277,7 @@ bool sendReading(float currentTime, float voltage) {
   http.begin(client, url);
   http.addHeader("Content-Type", "application/json");
 
-  String body = "{\"time\":" + String(currentTime, 4) + ",\"voltage\":" + String(voltage, 4) + "}";
+  String body = "{\"voltage\":" + String(voltage, 4) + "}";
   int status = http.POST(body);
   http.end();
 
@@ -331,11 +331,10 @@ void loop() {
 
     float inputValue   = analogRead(A0);
     float voltageValue = inputValue * (REF_VOLTAGE / REF_ADC);
-    float currentTime  = float(millis()) / (1000.0 * 60.0 * 60.0);
 
-    Serial.printf("Sending: time=%.4f voltage=%.4f\n", currentTime, voltageValue);
+    Serial.printf("Sending: voltage=%.4f\n", voltageValue);
 
-    if (sendReading(currentTime, voltageValue)) {
+    if (sendReading(voltageValue)) {
       Serial.println("OK");
       blinkSuccess();
     } else {

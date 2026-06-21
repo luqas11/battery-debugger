@@ -31,10 +31,11 @@ func resolveRecordsDir() string {
 
 // TestMetadata is the content of a <name>.json file.
 type TestMetadata struct {
-	Date    string  `json:"date"`
-	Current float64 `json:"current"`
-	Age     float64 `json:"age"`
-	Outlier bool    `json:"outlier"`
+	Date      string  `json:"date"`
+	Current   float64 `json:"current"`
+	Age       float64 `json:"age"`
+	Outlier   bool    `json:"outlier"`
+	StartTime int64   `json:"startTime,omitempty"`
 }
 
 // Reading is a single Time/Voltage pair read from a test's CSV file.

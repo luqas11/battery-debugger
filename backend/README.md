@@ -53,13 +53,14 @@ Starts a new test on the backend. The given name can only contain numbers, lette
 
 `[POST] /save-reading`
 
-Saves a voltage and time value to the current test file. Both values should be numbers. The request body must be:
+Saves a voltage reading to the current test file. The request body must be:
 ```json
 {
-    "voltage": 12.0,
-    "time": 1
+    "voltage": 12.0
 }
 ```
+
+The time elapsed since the test started is computed by the backend and written to the CSV alongside the voltage. This makes the recorded time independent of when the ESP was booted, and robust to ESP reboots mid-test.
 
 `[POST] /end-test`
 

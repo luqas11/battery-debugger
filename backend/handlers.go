@@ -88,13 +88,20 @@ func handleSaveReading(w http.ResponseWriter, r *http.Request) {
 	}
 
 	var body struct {
-		Time    *float64 `json:"time"`
 		Voltage *float64 `json:"voltage"`
 	}
-	if err := json.NewDecoder(r.Body).Decode(&body); err != nil || body.Time == nil || body.Voltage == nil {
-		writeError(w, http.StatusBadRequest, "Invalid reading value/s. Time and voltage must be numbers.")
+	if err := json.NewDecoder(r.Body).Decode(&body); err != nil || body.Voltage == nil {
+		writeError(w, http.StatusBadRequest, "Invalid reading value. Voltage must be a number.")
 		return
 	}
+
+	meta, err := readTestMetadata(currentTestName)
+	if err != nil {
+		writeError(w, http.StatusInternalServerError, "An unexpected error has occurred. The reading was not saved.")
+		return
+	}
+
+	elapsed := time.Since(time.Unix(meta.StartTime, 0)).Hours()
 
 	file, err := os.OpenFile(csvFileName(currentTestName), os.O_APPEND|os.O_WRONLY, 0644)
 	if err != nil {
@@ -103,7 +110,7 @@ func handleSaveReading(w http.ResponseWriter, r *http.Request) {
 	}
 	defer file.Close()
 
-	content := strconv.FormatFloat(*body.Time, 'f', -1, 64) + "," + strconv.FormatFloat(*body.Voltage, 'f', -1, 64) + "\n"
+	content := strconv.FormatFloat(elapsed, 'f', -1, 64) + "," + strconv.FormatFloat(*body.Voltage, 'f', -1, 64) + "\n"
 	if _, err := file.WriteString(content); err != nil {
 		writeError(w, http.StatusInternalServerError, "An unexpected error has occurred. The reading was not saved.")
 		return
@@ -168,7 +175,7 @@ func handleStartTest(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	metadata := TestMetadata{Date: body.Date, Current: *body.Current, Age: *body.Age, Outlier: false}
+	metadata := TestMetadata{Date: body.Date, Current: *body.Current, Age: *body.Age, Outlier: false, StartTime: time.Now().Unix()}
 	metadataBytes, err := json.Marshal(metadata)
 	if err != nil {
 		writeError(w, http.StatusInternalServerError, "An unexpected error has occurred. The test has not started.")
@@ -194,6 +201,19 @@ func handleEndTest(w http.ResponseWriter, r *http.Request) {
 
 	if currentTestName == "" {
 		writeError(w, http.StatusBadRequest, "No test is currently in progress.")
+		return
+	}
+
+	// Strip StartTime from the metadata before saving the final record.
+	meta, err := readTestMetadata(currentTestName)
+	if err != nil {
+		writeError(w, http.StatusInternalServerError, "An unexpected error has occurred. The test has not stopped.")
+		return
+	}
+	meta.StartTime = 0
+	metaBytes, err := json.Marshal(meta)
+	if err != nil || os.WriteFile(jsonFileName(currentTestName), metaBytes, 0644) != nil {
+		writeError(w, http.StatusInternalServerError, "An unexpected error has occurred. The test has not stopped.")
 		return
 	}
 
