@@ -43,14 +43,16 @@ The conversion is: `voltage = analogRead(A0) * (REF_VOLTAGE / REF_ADC)`
 
 To recalibrate, apply a known voltage to the input (close to the voltages you expect to measure for best accuracy), read the raw ADC value from the Serial monitor, and update both constants.
 
-## LED patterns
+## LED indicators
 
-| Pattern | Meaning |
-|---|---|
-| Blinking every 500 ms | Connecting to WiFi |
-| 1 long blink | WiFi connected successfully |
-| 3 short blinks | Reading sent successfully |
-| 2 long blinks | Error sending reading |
+The firmware uses two external LEDs connected to GPIO4 (green) and GPIO12 (red). Wire each LED with a resistor (~220–330 Ω) between the GPIO pin and the anode; connect the cathode to GND.
+
+| Green LED | Red LED | Meaning |
+|---|---|---|
+| Blinking | Off | Connecting to WiFi |
+| Solid | Off | Connected, last reading OK |
+| Solid | Blinking | Connected, error sending last reading |
+| Off | Solid | No WiFi connection |
 
 ## Dependencies
 

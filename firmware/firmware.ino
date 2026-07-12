@@ -8,7 +8,8 @@
 const float REF_VOLTAGE = 11.46;
 const int   REF_ADC     = 566;
 
-const int           LED_PIN             = LED_BUILTIN;
+const int           LED_GREEN_PIN       = 4;   // GPIO4  — external green LED (active HIGH)
+const int           LED_RED_PIN         = 12;  // GPIO12 — external red LED   (active HIGH)
 const int           WIFI_TIMEOUT_MS     = 10000;
 const char*         CONFIG_PATH         = "/config.json";
 const unsigned long DEFAULT_INTERVAL_MS = 120000UL;
@@ -20,23 +21,48 @@ String        savedPassword;
 String        savedServerHost;
 unsigned long readingIntervalMs = DEFAULT_INTERVAL_MS;
 
-// ── LED helpers ───────────────────────────────────────────────────────────────
+// ── LED state ─────────────────────────────────────────────────────────────────
 
-void ledOn()  { digitalWrite(LED_PIN, LOW);  }
-void ledOff() { digitalWrite(LED_PIN, HIGH); }
+enum LedState { CONNECTING, CONNECTED_OK, CONNECTED_ERROR, NO_WIFI };
+LedState      ledState        = CONNECTING;
+unsigned long lastLedBlinkMs  = 0;
+bool          ledBlinkToggle  = false;
 
-void blink(int count, int onMs, int offMs) {
-  for (int i = 0; i < count; i++) {
-    ledOn();
-    delay(onMs);
-    ledOff();
-    if (i < count - 1) delay(offMs);
-  }
+void setLedState(LedState state) {
+  ledState       = state;
+  ledBlinkToggle = false;
+  lastLedBlinkMs = 0;
 }
 
-void blinkSuccess()   { blink(3, 100, 100); }
-void blinkError()     { blink(2, 500, 200); }
-void blinkConnected() { blink(1, 600, 0);   }
+void updateLeds() {
+  unsigned long now = millis();
+  switch (ledState) {
+    case CONNECTING:
+      if (now - lastLedBlinkMs >= 500) {
+        ledBlinkToggle = !ledBlinkToggle;
+        digitalWrite(LED_GREEN_PIN, ledBlinkToggle ? HIGH : LOW);
+        digitalWrite(LED_RED_PIN, LOW);
+        lastLedBlinkMs = now;
+      }
+      break;
+    case CONNECTED_OK:
+      digitalWrite(LED_GREEN_PIN, HIGH);
+      digitalWrite(LED_RED_PIN,   LOW);
+      break;
+    case CONNECTED_ERROR:
+      digitalWrite(LED_GREEN_PIN, HIGH);
+      if (now - lastLedBlinkMs >= 500) {
+        ledBlinkToggle = !ledBlinkToggle;
+        digitalWrite(LED_RED_PIN, ledBlinkToggle ? HIGH : LOW);
+        lastLedBlinkMs = now;
+      }
+      break;
+    case NO_WIFI:
+      digitalWrite(LED_GREEN_PIN, LOW);
+      digitalWrite(LED_RED_PIN,   HIGH);
+      break;
+  }
+}
 
 // ── Config (LittleFS) ─────────────────────────────────────────────────────────
 
@@ -48,9 +74,9 @@ bool loadConfig() {
   if (deserializeJson(doc, f)) { f.close(); return false; }
   f.close();
 
-  savedSSID        = doc["ssid"]        | "";
-  savedPassword    = doc["password"]    | "";
-  savedServerHost  = doc["serverHost"]  | "";
+  savedSSID         = doc["ssid"]       | "";
+  savedPassword     = doc["password"]   | "";
+  savedServerHost   = doc["serverHost"] | "";
   readingIntervalMs = doc["intervalMs"] | DEFAULT_INTERVAL_MS;
   return savedSSID.length() > 0;
 }
@@ -74,19 +100,18 @@ bool saveConfig(const String& ssid, const String& password, const String& server
 bool connectWiFi(const String& ssid, const String& password) {
   WiFi.begin(ssid.c_str(), password.c_str());
 
-  unsigned long start = millis();
-  bool ledState = false;
+  unsigned long start  = millis();
+  bool          toggle = false;
   while (WiFi.status() != WL_CONNECTED) {
     if (millis() - start > WIFI_TIMEOUT_MS) {
       WiFi.disconnect();
-      ledOff();
       return false;
     }
-    ledState = !ledState;
-    digitalWrite(LED_PIN, ledState ? LOW : HIGH);
+    toggle = !toggle;
+    digitalWrite(LED_GREEN_PIN, toggle ? HIGH : LOW);
+    digitalWrite(LED_RED_PIN, LOW);
     delay(500);
   }
-  ledOff();
   return true;
 }
 
@@ -151,7 +176,6 @@ const char PAGE_STYLE[] PROGMEM = R"css(
 void handleRoot() {
   bool connected = WiFi.status() == WL_CONNECTED;
 
-  // Status card
   String statusCard = "<div class=\"card\"><h2>Estado de conexión</h2>";
   statusCard += "<div class=\"row\"><span class=\"label\">Estado</span>"
                 "<span class=\"" + String(connected ? "connected" : "disconnected") + "\">"
@@ -239,14 +263,14 @@ void handleSaveWiFi() {
 
   if (WiFi.SSID() != ssid || WiFi.status() != WL_CONNECTED) {
     WiFi.disconnect();
-    connectWiFi(ssid, password);
-  }
-
-  if (WiFi.status() == WL_CONNECTED) {
-    blinkConnected();
-    Serial.println("WiFi connected: " + WiFi.localIP().toString());
-  } else {
-    Serial.println("WiFi connection failed");
+    setLedState(CONNECTING);
+    if (connectWiFi(ssid, password)) {
+      setLedState(CONNECTED_OK);
+      Serial.println("WiFi connected: " + WiFi.localIP().toString());
+    } else {
+      setLedState(NO_WIFI);
+      Serial.println("WiFi connection failed");
+    }
   }
 }
 
@@ -305,19 +329,19 @@ bool sendReading(float voltage) {
 
 void setup() {
   Serial.begin(115200);
-  pinMode(LED_PIN, OUTPUT);
-  ledOff();
+  pinMode(LED_GREEN_PIN, OUTPUT);
+  pinMode(LED_RED_PIN,   OUTPUT);
+  setLedState(CONNECTING);
+  updateLeds();
 
   if (!LittleFS.begin()) {
     Serial.println("LittleFS mount failed, formatting...");
     LittleFS.format();
     if (!LittleFS.begin()) {
       Serial.println("LittleFS mount failed after format");
-      blinkError();
     }
   }
 
-  // Always run as AP+STA so the portal is available regardless of WiFi status.
   WiFi.mode(WIFI_AP_STA);
   WiFi.softAP(AP_SSID, AP_PASSWORD);
   Serial.println("AP started: " + String(AP_SSID));
@@ -327,12 +351,14 @@ void setup() {
   if (loadConfig()) {
     Serial.println("Connecting to: " + savedSSID);
     if (connectWiFi(savedSSID, savedPassword)) {
+      setLedState(CONNECTED_OK);
       Serial.println("WiFi connected: " + WiFi.localIP().toString());
-      blinkConnected();
     } else {
+      setLedState(NO_WIFI);
       Serial.println("WiFi connection failed, continuing in AP-only mode");
     }
   } else {
+    setLedState(NO_WIFI);
     Serial.println("No config found, waiting for configuration via portal");
   }
 }
@@ -341,6 +367,7 @@ unsigned long lastSentAt = DEFAULT_INTERVAL_MS; // triggers immediately on first
 
 void loop() {
   server.handleClient();
+  updateLeds();
 
   if (WiFi.status() == WL_CONNECTED && savedServerHost.length() > 0
       && millis() - lastSentAt >= readingIntervalMs) {
@@ -353,10 +380,10 @@ void loop() {
 
     if (sendReading(voltageValue)) {
       Serial.println("OK");
-      blinkSuccess();
+      setLedState(CONNECTED_OK);
     } else {
       Serial.println("ERROR");
-      blinkError();
+      setLedState(CONNECTED_ERROR);
     }
   }
 }
