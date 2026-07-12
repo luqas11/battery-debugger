@@ -20,7 +20,7 @@ An Arduino sketch for the **ESP8266** that periodically reads the battery voltag
 
 ### `circuit/`
 
-KiCad schematic for the circuit that connects the ESP8266 board to the battery terminals. A PDF export is available at [`circuit/circuit-schematic.pdf`](circuit/circuit-schematic.pdf).
+KiCad schematic for the circuit that connects the ESP8266 board to the battery terminals, plus a 3D-printable case. A PDF export of the schematic is available at [`circuit/circuit-schematic.pdf`](circuit/circuit-schematic.pdf). See [`circuit/README.md`](circuit/README.md) for details.
 
 ### `backend/`
 
