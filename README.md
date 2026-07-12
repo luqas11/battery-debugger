@@ -8,15 +8,15 @@ A discharge test goes like this:
 
 1. Connect a fixed load and the ESP8266 board to the battery terminals.
 2. Open the backend web UI and start a new test, entering the date, the load current, and the battery's age in months.
-3. The ESP takes periodic voltage readings and sends them to the backend, which saves them to a CSV file.
+3. The ESP takes periodic voltage readings and sends them to the backend, which computes the elapsed time since the test started and saves both values to a CSV file.
 4. Once the battery is depleted, stop the test from the web UI.
 5. Push the new records to the repository — the dashboard on GitHub Pages updates automatically.
 
 ## Parts of the project
 
-### `firmware-new/`
+### `firmware/`
 
-An Arduino sketch for the **ESP8266** that periodically reads the battery voltage through the analog input and sends it to the backend. WiFi credentials and the backend URL are configured at runtime via a built-in setup portal — no hardcoded credentials. See [`firmware-new/README.md`](firmware-new/README.md) for setup and calibration details.
+An Arduino sketch for the **ESP8266** that periodically reads the battery voltage through the analog input and sends it to the backend. The WiFi credentials, the backend URL, and the reading interval are configured at runtime via a built-in setup portal, with no reflashing needed. Two external LEDs indicate the connection and reading status. See [`firmware/README.md`](firmware/README.md) for setup, wiring, and calibration details.
 
 ### `circuit/`
 
@@ -32,7 +32,7 @@ A **Go** tool that reads the `records/` folder and generates a static dashboard,
 
 ### `records/`
 
-CSV and JSON files for every finished test. Each test produces a `<name>.csv` (time/voltage readings) and a `<name>.json` (date, current, and battery age). This folder is the single source of data for both the backend and the dashboard.
+CSV and JSON files for every finished test. Each test produces a `<name>.csv` (time/voltage readings) and a `<name>.json` (date, current, battery age, and an `outlier` flag that excludes anomalous tests from the capacity decay chart). This folder is the single source of data for both the backend and the dashboard.
 
 ## Running the backend
 
