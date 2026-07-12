@@ -10,7 +10,7 @@ const int   REF_ADC     = 566;
 
 const int           LED_GREEN_PIN       = 4;   // GPIO4  — external green LED (active HIGH)
 const int           LED_RED_PIN         = 12;  // GPIO12 — external red LED   (active HIGH)
-const int           WIFI_TIMEOUT_MS     = 10000;
+const unsigned long WIFI_TIMEOUT_MS     = 10000UL;
 const char*         CONFIG_PATH         = "/config.json";
 const unsigned long DEFAULT_INTERVAL_MS = 120000UL;
 
@@ -20,6 +20,7 @@ String        savedSSID;
 String        savedPassword;
 String        savedServerHost;
 unsigned long readingIntervalMs = DEFAULT_INTERVAL_MS;
+unsigned long lastSentAt        = DEFAULT_INTERVAL_MS; // triggers immediately on first loop
 
 // ── LED state ─────────────────────────────────────────────────────────────────
 
@@ -258,6 +259,8 @@ void handleSaveWiFi() {
   savedSSID     = ssid;
   savedPassword = password;
 
+  // Respond before attempting to connect: connectWiFi blocks for up to 10s,
+  // and the browser would hang waiting for this response otherwise.
   server.sendHeader("Location", "/");
   server.send(303);
 
@@ -278,13 +281,14 @@ void handleSaveBackend() {
   String serverHost  = server.arg("serverHost");
   String intervalStr = server.arg("intervalMin");
 
-  unsigned long newIntervalMs = readingIntervalMs;
   if (intervalStr.length() > 0) {
     int mins = intervalStr.toInt();
-    if (mins >= 1) newIntervalMs = (unsigned long)mins * 60000UL;
+    if (mins < 1) {
+      server.send(400, "text/html", errorPage("El intervalo debe ser un número entero de minutos, mayor o igual a 1."));
+      return;
+    }
+    readingIntervalMs = (unsigned long)mins * 60000UL;
   }
-
-  readingIntervalMs = newIntervalMs;
 
   if (!saveConfig(savedSSID, savedPassword, serverHost)) {
     server.send(500, "text/html", errorPage("Error al guardar la configuración."));
@@ -362,8 +366,6 @@ void setup() {
     Serial.println("No config found, waiting for configuration via portal");
   }
 }
-
-unsigned long lastSentAt = DEFAULT_INTERVAL_MS; // triggers immediately on first loop
 
 void loop() {
   server.handleClient();

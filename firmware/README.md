@@ -1,6 +1,6 @@
 # Firmware
 
-An Arduino sketch for the **ESP8266** that periodically reads the battery voltage through the analog input and sends it to the backend every 2 minutes.
+An Arduino sketch for the **ESP8266** that periodically reads the battery voltage through the analog input and sends it to the backend, at a configurable interval (2 minutes by default).
 
 ## Setup
 
@@ -26,7 +26,7 @@ On first boot, the ESP starts a WiFi network using the SSID and password from `c
 The page has two independent configuration sections:
 
 - **Configurar WiFi** — enter your network's SSID and password and press **Guardar**. The ESP saves the credentials and connects. Leaving the password field blank when re-saving the same network keeps the previously saved password.
-- **Configurar backend** — enter the host and port of the machine running the backend (e.g. `192.168.1.42:8000`) and press **Guardar**.
+- **Configurar backend** — enter the host and port of the machine running the backend (e.g. `192.168.1.42:8000`) and the reading interval in minutes, then press **Guardar**. The interval takes effect immediately, without a restart.
 
 The setup portal stays available at `http://192.168.4.1` after a successful connection, so you can check the connection status, see the ESP's IP on the local network, or update any setting without reflashing.
 
