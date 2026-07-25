@@ -2,5 +2,5 @@
     "date": "2025-07-23",
     "current": 0.22,
     "age": 21,
-    "outlier": false
+    "outlier": true
 }
